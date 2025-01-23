@@ -23,12 +23,15 @@
                     </form>
                 </div>
                 <div class="card-footer text-center">
-                    <small>Don't have an account? <a href="register.html">Register here</a>.</small>
+                    <small>Don't have an account? <a href="<?= route('register') ?>">Register here</a>.</small>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<?php $content = ob_get_clean(); ?>
-<?php layout('guest', compact('content')); ?>
+<?php
+$content = ob_get_clean();
+$title = "Login";
+layout('guest', compact('content', 'title'));
+?>

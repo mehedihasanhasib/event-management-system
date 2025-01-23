@@ -29,7 +29,7 @@
     <h1>Welcome to the Event Management System</h1>
     <p>Discover, create, and join amazing events happening around you.</p>
     <a href="<?php route('login') ?>" class="btn btn-primary btn-lg mt-3 me-2">Login</a>
-    <a href="#" class="btn btn-secondary btn-lg mt-3">Register</a>
+    <a href="<?php route('register') ?>" class="btn btn-secondary btn-lg mt-3">Register</a>
 </div>
 
 
