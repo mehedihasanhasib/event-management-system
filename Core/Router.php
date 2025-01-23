@@ -9,26 +9,22 @@ class Router
 
     public function get($uri, $controller)
     {
-        $this->addRoute('GET', $uri, $controller);
-        return $this; // Allow method chaining
+        return $this->addRoute('GET', $uri, $controller);
     }
 
     public function post($uri, $controller)
     {
-        $this->addRoute('POST', $uri, $controller);
-        return $this; // Allow method chaining
+        return $this->addRoute('POST', $uri, $controller);
     }
 
     public function put($uri, $controller)
     {
-        $this->addRoute('PUT', $uri, $controller);
-        return $this; // Allow method chaining
+        return $this->addRoute('PUT', $uri, $controller);
     }
 
     public function delete($uri, $controller)
     {
-        $this->addRoute('DELETE', $uri, $controller);
-        return $this; // Allow method chaining
+        return $this->addRoute('DELETE', $uri, $controller);
     }
 
     private function addRoute($method, $uri, $controller)
@@ -38,6 +34,7 @@ class Router
             'uri' => $uri,
             'controller' => $controller,
         ];
+        return $this;
     }
 
     public function name($name)

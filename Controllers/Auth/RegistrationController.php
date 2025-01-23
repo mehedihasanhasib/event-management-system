@@ -8,6 +8,6 @@ class RegistrationController extends Controller
 {
     public function index()
     {
-        $this->view('auth.register');
+        return $this->view('auth.register');
     }
 }

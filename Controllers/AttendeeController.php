@@ -4,10 +4,10 @@ namespace Controllers;
 
 use Core\Controller;
 
-class HomeController extends Controller
+class AttendeeController extends Controller
 {
     public function index()
     {
-        return $this->view('home.index');
+        return $this->view('attendees.index');
     }
 }
