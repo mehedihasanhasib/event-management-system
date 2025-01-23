@@ -5,41 +5,53 @@ namespace Core;
 class Router
 {
     private $routes = [];
+    public $namedRoutes = [];
 
-    public function get($uir, $controller)
+    public function get($uri, $controller)
     {
-        $this->routes[] = [
-            'method' => 'GET',
-            'uri' => $uir,
-            'controller' => $controller
-        ];
+        $this->addRoute('GET', $uri, $controller);
+        return $this; // Allow method chaining
     }
 
-    public function post($uir, $controller)
+    public function post($uri, $controller)
     {
-        $this->routes[] = [
-            'method' => 'POST',
-            'uri' => $uir,
-            'controller' => $controller
-        ];
+        $this->addRoute('POST', $uri, $controller);
+        return $this; // Allow method chaining
     }
 
     public function put($uri, $controller)
     {
-        $this->routes[] = [
-            'method' => 'PUT',
-            'uri' => $uri,
-            'controller' => $controller
-        ];
+        $this->addRoute('PUT', $uri, $controller);
+        return $this; // Allow method chaining
     }
 
     public function delete($uri, $controller)
     {
+        $this->addRoute('DELETE', $uri, $controller);
+        return $this; // Allow method chaining
+    }
+
+    private function addRoute($method, $uri, $controller)
+    {
         $this->routes[] = [
-            'method' => 'DELETE',
+            'method' => $method,
             'uri' => $uri,
-            'controller' => $controller
+            'controller' => $controller,
         ];
+    }
+
+    public function name($name)
+    {
+        $lastRoute = end($this->routes);
+        if ($lastRoute) {
+            $this->namedRoutes[$name] = [
+                'uri' => $lastRoute['uri'],
+                'method' => $lastRoute['method'],
+                'controller' => $lastRoute['controller'],
+            ];
+        }
+
+        return $this;
     }
 
     public function route($uri, $method)
@@ -58,5 +70,12 @@ class Router
         }
         http_response_code(404);
         require_once '../views/404.php';
+    }
+
+    public function url($name, $params = [])
+    {
+        
+        $uri = $this->namedRoutes[$name]['uri'];
+        return $uri;
     }
 }

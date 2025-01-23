@@ -21,3 +21,9 @@ function component(string $component, array $data = [])
     extract($data);
     include BASE_PATH . str_replace(".", DIRECTORY_SEPARATOR, $component_folder) . $component . ".php";
 }
+
+function route($name, $params = [])
+{
+    global $router;
+    echo $router->url($name, $params);
+}
