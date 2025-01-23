@@ -24,6 +24,7 @@
         <p>&copy; 2025 Event Management System. All rights reserved.</p>
     </footer>
 
+    <script src="<?php asset('js/submit-form.js') ?>"></script>
     <?= $script ?? "" ?>
 </body>
 

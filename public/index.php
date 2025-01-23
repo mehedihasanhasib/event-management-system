@@ -1,8 +1,11 @@
 <?php
-define('BASE_PATH', dirname(__DIR__));
+session_start();
+use Core\Session;
 
+define('BASE_PATH', dirname(__DIR__));
 require_once BASE_PATH . "/Core/helpers.php";
 
+// dd($_SERVER['HTTP']);
 
 spl_autoload_register(function ($class) {
     $class  = str_replace("\\", DIRECTORY_SEPARATOR, $class) . '.php';
@@ -22,3 +25,5 @@ $uri = parse_url($_SERVER["REQUEST_URI"])["path"];
 $method = $_POST['_method'] ?? $_SERVER["REQUEST_METHOD"];
 
 $router->route($uri, $method);
+
+Session::unflash();

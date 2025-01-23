@@ -6,8 +6,13 @@ use Core\Controller;
 
 class LoginController extends Controller
 {
-    public function index()
+    public function create()
     {
         return $this->view('auth.login');
+    }
+
+    public function store()
+    {
+        
     }
 }

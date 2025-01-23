@@ -61,7 +61,8 @@ class Router
                 }
                 $controller = new $route['controller'][0]();
                 $method = $route['controller'][1];
-                $controller->$method();
+                $request = new Request();
+                $controller->$method($request);
                 return;
             }
         }
@@ -71,7 +72,7 @@ class Router
 
     public function url($name, $params = [])
     {
-        
+
         $uri = $this->namedRoutes[$name]['uri'];
         return $uri;
     }
