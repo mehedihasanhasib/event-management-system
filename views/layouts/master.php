@@ -12,7 +12,6 @@
 
 <body>
 
-    <!-- Navbar -->
     <header>
         <?php component('nav') ?>
     </header>
