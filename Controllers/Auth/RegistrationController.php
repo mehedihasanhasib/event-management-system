@@ -2,6 +2,7 @@
 
 namespace Controllers\Auth;
 
+use Core\Auth;
 use Core\Validator;
 use Core\Controller;
 use Core\Request;
@@ -36,6 +37,7 @@ class RegistrationController extends Controller
                 'email' => $request->input('email'),
                 'password' => password_hash($request->input('password'), PASSWORD_BCRYPT)
             ]);
+            Auth::login(['name' => $request->input('name'), 'email' => $request->input('email')]);
             return json_response(['status' => true, 'message' => 'Registration successful'], 201);
         } catch (\Throwable $th) {
             return json_response(['status' => false, 'errors' => ['Something went worng! Try again']], 500);

@@ -5,10 +5,24 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="<?php route('login') ?>">Login</a></li>
-                <li class="nav-item"><a class="nav-link" href="<?php route('register') ?>">Register</a></li>
-            </ul>
+            <?php if (auth()): ?>
+                <div class="dropdown ms-auto">
+                    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"> -->
+                    <img src="" alt="User Avatar" width="30" height="30" class="rounded-circle me-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <?php echo \Core\Auth::user()['name'] ?>
+                    <!-- </button> -->
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </div>
+            <?php else: ?>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="<?php route('login') ?>">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?php route('register') ?>">Register</a></li>
+                </ul>
+            <?php endif; ?>
         </div>
     </div>
 </nav>

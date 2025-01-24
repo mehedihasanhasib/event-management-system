@@ -55,13 +55,9 @@ ob_start()
             event.preventDefault()
             const url = $(this).attr("action")
             const formData = new FormData(this);
-
-            // if (!name || !email || !password) {
-            //     alert("All Fields are required")
-            //     return false;
-            // }
-            // console.log(url);
-            submit(url, formData);
+            submit(url, formData, function() {
+                window.location.href = "<?php route('home') ?>"
+            });
         })
     })
 </script>

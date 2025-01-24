@@ -41,6 +41,15 @@ function asset($path)
     return $baseUrl . '/' . ltrim($path, '/');
 }
 
+function auth()
+{
+    if (\Core\Session::get('auth')) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function dd($value)
 {
     echo '<pre>';
