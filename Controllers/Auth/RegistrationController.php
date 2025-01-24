@@ -7,7 +7,7 @@ use Models\User;
 use Core\Validator;
 use Core\Controller;
 use Core\Http\Request;
-
+use Helpers\File;
 
 class RegistrationController extends Controller
 {
@@ -24,6 +24,7 @@ class RegistrationController extends Controller
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'min:8'],
             'confirm_password' => ['required', 'min:8', 'confirm:password'],
+            'profile_picture' => ['image', 'size:2048', 'mimes:jpg,png']
         ]);
 
         if ($validator->fails()) {
@@ -32,9 +33,15 @@ class RegistrationController extends Controller
 
         try {
             $user = new User();
+            if ($request->hasFile('profile_picture')) {
+                $file = $request->file('profile_picture');
+                $path = "uploads/";
+                $image = File::upload($file, $path);
+            }
             $user->create([
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
+                'profile_picture' => $image ?? null,
                 'password' => password_hash($request->input('password'), PASSWORD_BCRYPT)
             ]);
             Auth::login(['name' => $request->input('name'), 'email' => $request->input('email')]);

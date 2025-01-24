@@ -3,7 +3,7 @@ session_start();
 use Core\Session;
 
 define('BASE_PATH', dirname(__DIR__));
-require_once BASE_PATH . "/Core/helpers.php";
+require_once BASE_PATH . "/Helpers/functions.php";
 
 // dd($_SERVER['HTTP']);
 

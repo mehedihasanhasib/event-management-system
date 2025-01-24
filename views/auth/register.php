@@ -17,11 +17,13 @@ ob_start()
                             <!-- <span class="text-danger nameError validationError"></span> -->
                             <?php component('input-error', ['className' => ["nameError"]]) ?>
                         </div>
+
                         <div class="mb-3">
                             <label for="email" class="form-label">Email address</label>
                             <input type="email" name="email" class="form-control" id="email" placeholder="Enter your email" required />
                             <?php component('input-error', ['className' => ["emailError"]]) ?>
                         </div>
+
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
                             <input type="password" name="password" class="form-control" id="password" placeholder="Create a password" required />
@@ -34,7 +36,16 @@ ob_start()
                             <?php component('input-error', ['className' => ["confirm_passwordError"]]) ?>
                         </div>
 
-                        <div class="d-grid">
+                        <div class="mb-3">
+                            <label for="profile_picture" class="form-label">Choose Profile Picture</label>
+                            <input type="file" , name="profile_picture" class="form-control" id="profile_picture" />
+                            <?php component('input-error', ['className' => ["profile_pictureError"]]) ?>
+                            <div>
+                                <img id="profile-picture-preview" src="<?= asset('/images/user-avatar/default-avatar.png') ?>" alt="Profile Picture Preview" style="width: 100px; height: 100px; border-radius: 50%; object-fit:cover;" />
+                            </div>
+                        </div>
+
+                        <div class=" d-grid">
                             <button type="submit" class="btn btn-success">Register</button>
                         </div>
                     </form>
