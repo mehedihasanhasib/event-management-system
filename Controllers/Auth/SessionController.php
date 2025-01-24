@@ -20,7 +20,7 @@ class SessionController extends Controller
             if (!password_verify($request->input('password'), $user['password'])) {
                 return json_response(['errors' => 'Credentials doesn\'t match'], 401);
             }
-            Auth::login(['name' => $user['name'], 'email' => $user['email']]);
+            Auth::login(['name' => $user['name'], 'email' => $user['email'], 'id' => $user['id']]);
             return json_response(['status' => true, 'message' => 'Login Successfull']);
         }
 

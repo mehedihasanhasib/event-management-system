@@ -7,7 +7,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <?php if (auth()): ?>
-                    <li class="nav-item"><a class="nav-link" href="<?= "" ?>">My Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= route('myevents') ?>">My Events</a></li>
                     <li class="nav-item"><a class="nav-link" href="<?= "" ?>">My Bookings</a></li>
                     <li class="nav-item">
                         <form action="<?= route('logout') ?>" method="POST">
