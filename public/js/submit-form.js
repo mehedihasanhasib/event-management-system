@@ -43,8 +43,13 @@ function submit(
         notification({ icon: "error", text: errorResponse[0] });
       }
 
+      if (statusCode == 401) {
+        const element = document.querySelector(`.validationError`);
+        element.innerText = errorResponse;
+        notification({ icon: "error", text: errorResponse });
+      }
+
       if (statusCode == 422) {
-        // const errorResponse = xhr.responseJSON.errors;
         Object.entries(errorResponse).forEach(function (errors) {
           const str = errors[0];
           const className = str.includes(".") ? str.split(".")[0] : str;

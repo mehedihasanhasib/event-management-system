@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use Models\User;
+
 class Auth
 {
     public static function login($data)
@@ -14,5 +16,11 @@ class Auth
     public static function user()
     {
         return Session::get('user') ?? null;
+    }
+
+    public static function attempt($credentials = [])
+    {
+        $user = new User();
+        return $user->where('email', $credentials['email']);
     }
 }

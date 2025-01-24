@@ -51,6 +51,13 @@ class Model
     //     return $stmt->execute($data);
     // }
 
+    public function where($column, $value)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->table} WHERE {$column} = :val");
+        $stmt->execute(['val' => $value]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function delete($id)
     {
         $stmt = $this->pdo->prepare("DELETE FROM {$this->table} WHERE {$this->primaryKey} = :id");
