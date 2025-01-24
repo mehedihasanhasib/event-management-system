@@ -1,0 +1,1 @@
+<span class="text-danger validationError <?= implode(" ", $className ?? []) ?>"><?= $message ?? "" ?></span>

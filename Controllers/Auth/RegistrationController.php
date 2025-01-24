@@ -15,15 +15,19 @@ class RegistrationController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $validator = new Validator();
         $validator->make($request->all(), [
-            'name' => ['required', 'string', 'max:5'],
+            'name' => ['required', 'string'],
             'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', 'string', 'max:1'],
+            'password' => ['required', 'min:8'],
+            'confirm_password' => ['required', 'min:8', 'confirm:password'],
         ]);
 
         if ($validator->fails()) {
-            json_response($validator->errors(), 422);
+            return json_response(['errors' => $validator->errors()], 422);
         }
+
+        return json_response(['status' => true, 'message' => 'Registration successful'], 201);
     }
 }

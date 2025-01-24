@@ -28,15 +28,21 @@ class Validator
                         break;
                     case str_starts_with($rule, 'max:'):
                         $maxLength = (int) substr($rule, 4);
-                        if (isset($data[$field]) && strlen($data[$field]) > $maxLength) {
+                        if (strlen($data[$field]) > $maxLength) {
                             $this->errors[$field][] = "The $field field must not exceed $maxLength characters.";
                         }
                         break;
 
                     case str_starts_with($rule, 'min:'):
                         $minLength = (int) substr($rule, 4);
-                        if (isset($data[$field]) && strlen($data[$field]) < $minLength) {
+                        if (strlen($data[$field]) < $minLength) {
                             $this->errors[$field][] = "The $field field must be at least $minLength characters.";
+                        }
+                        break;
+                    case str_starts_with($rule, 'confirm:');
+                        $targetField = substr($rule, 8); // Extract the field to confirm
+                        if ($data[$targetField] !== $data[$field]) {
+                            $this->errors[$field][] = "The $field doesn't match the $targetField.";
                         }
                         break;
                 }

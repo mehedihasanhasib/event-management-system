@@ -46,6 +46,6 @@ function dd($value)
     echo '<pre>';
     var_dump($value);
     echo "</pre>";
-    // http_response_code(500);
+    http_response_code(500);
     exit;
 }
