@@ -5,6 +5,8 @@ namespace Controllers\Auth;
 use Core\Validator;
 use Core\Controller;
 use Core\Request;
+use Models\User;
+
 
 class RegistrationController extends Controller
 {
@@ -15,7 +17,6 @@ class RegistrationController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
         $validator = new Validator();
         $validator->make($request->all(), [
             'name' => ['required', 'string'],
@@ -28,6 +29,16 @@ class RegistrationController extends Controller
             return json_response(['errors' => $validator->errors()], 422);
         }
 
-        return json_response(['status' => true, 'message' => 'Registration successful'], 201);
+        try {
+            $user = new User();
+            $user->create([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => password_hash($request->input('password'), PASSWORD_BCRYPT)
+            ]);
+            return json_response(['status' => true, 'message' => 'Registration successful'], 201);
+        } catch (\Throwable $th) {
+            return json_response(['status' => false, 'errors' => ['Something went worng! Try again']], 500);
+        }
     }
 }

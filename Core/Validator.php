@@ -45,6 +45,13 @@ class Validator
                             $this->errors[$field][] = "The $field doesn't match the $targetField.";
                         }
                         break;
+                    case str_starts_with($rule, 'unique:');
+                        list($table, $column) = explode(',', substr($rule, 7));
+                        $result = Database::query("SELECT * FROM $table WHERE $column = ?", [$data[$field]]);
+                        if (!empty($result)) {
+                            $this->errors[$field][] = "The $field already exists.";
+                        }
+                        break;
                 }
             }
         }
