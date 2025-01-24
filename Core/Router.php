@@ -33,6 +33,7 @@ class Router
             'method' => $method,
             'uri' => $uri,
             'controller' => $controller,
+            'middleware' => null
         ];
         return $this;
     }
@@ -51,6 +52,11 @@ class Router
         return $this;
     }
 
+    public function middleware($key)
+    {
+        return $this->routes[array_key_last($this->routes)]['middleware'] = $key;
+    }
+
     public function route($uri, $method)
     {
         foreach ($this->routes as $route) {
@@ -58,6 +64,9 @@ class Router
                 if ($method != $route['method']) {
                     http_response_code(405);
                     die("$method method is not supported on this route\n");
+                }
+                if ($route['middleware']) {
+                    (new $route['middleware'])->handle();
                 }
                 $controller = new $route['controller'][0]();
                 $method = $route['controller'][1];

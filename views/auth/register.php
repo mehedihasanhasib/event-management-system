@@ -40,7 +40,7 @@ ob_start()
                     </form>
                 </div>
                 <div class="card-footer text-center">
-                    <small>Already have an account? <a href="<?php route('login') ?>">Login here</a>.</small>
+                    <small>Already have an account? <a href="<?= route('login') ?>">Login here</a>.</small>
                 </div>
             </div>
         </div>
@@ -56,7 +56,7 @@ ob_start()
             const url = $(this).attr("action")
             const formData = new FormData(this);
             submit(url, formData, function() {
-                window.location.href = "<?php route('home') ?>"
+                window.location.href = "<?= route('home') ?>"
             });
         })
     })

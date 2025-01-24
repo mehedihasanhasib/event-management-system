@@ -16,7 +16,7 @@ function component(string $component, array $data = [])
 function route($name, $params = [])
 {
     global $router;
-    echo $router->url($name, $params);
+    return $router->url($name, $params);
 }
 
 function redirect($url)
