@@ -49,7 +49,7 @@ ob_start()
 
 <?php ob_start() ?>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    $(document).ready(function() {
         const registrationForm = $("#registration-from")
         registrationForm.on("submit", function(event) {
             event.preventDefault()

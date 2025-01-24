@@ -24,7 +24,6 @@
             </thead>
             <tbody>
                 <?php
-                // Example event data (Replace with database query results)
                 $events = [
                     [
                         "id" => 1,

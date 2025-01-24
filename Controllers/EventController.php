@@ -8,7 +8,7 @@ class EventController extends Controller
 {
     public function index()
     {
-        return $this->view('event.index');
+        return $this->view('events.index');
     }
 
     public function create()

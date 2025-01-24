@@ -3,10 +3,10 @@
 namespace Controllers\Auth;
 
 use Core\Auth;
+use Models\User;
 use Core\Validator;
 use Core\Controller;
-use Core\Request;
-use Models\User;
+use Core\Http\Request;
 
 
 class RegistrationController extends Controller

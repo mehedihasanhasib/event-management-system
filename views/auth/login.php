@@ -8,7 +8,7 @@
                     <h4>Login</h4>
                 </div>
                 <div class="card-body">
-                    <form>
+                    <form id="login-from" action="<?= route('login.store') ?>" method="POST">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email address</label>
                             <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
@@ -30,8 +30,24 @@
     </div>
 </div>
 
+<?php ob_start() ?>
+<script>
+    $(document).ready(function() {
+        const registrationForm = $("#registration-from")
+        registrationForm.on("submit", function(event) {
+            event.preventDefault()
+            const url = $(this).attr("action")
+            const formData = new FormData(this);
+            submit(url, formData, function() {
+                window.location.href = "<?= route('home') ?>"
+            });
+        })
+    })
+</script>
+<?php $script = ob_get_clean() ?>
+
 <?php
 $content = ob_get_clean();
 $title = "Login";
-layout('guest', compact('content', 'title'));
+layout('guest', compact('content', 'title', 'script'));
 ?>
