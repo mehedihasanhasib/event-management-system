@@ -31,10 +31,10 @@ function redirect($url)
 function json_response($data, $status_code = 200)
 {
     // send json response with status code
+    http_response_code($status_code);
     header('Content-Type: application/json');
     $response = $data;
     echo json_encode($response);
-    http_response_code($status_code);
     // exit;
 }
 

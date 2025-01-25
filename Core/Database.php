@@ -16,8 +16,13 @@ class Database
         $dbConfig = $config['db'];
 
         try {
+            // $this->pdo = new PDO(
+            //     "mysql:host={$dbConfig['host']};dbname={$dbConfig['dbname']}",
+            //     $dbConfig['username'],
+            //     $dbConfig['password']
+            // );
             $this->pdo = new PDO(
-                "mysql:host={$dbConfig['host']};dbname={$dbConfig['dbname']}",
+                "mysql:host={$dbConfig['host']};port={$dbConfig['port']};dbname={$dbConfig['dbname']}",
                 $dbConfig['username'],
                 $dbConfig['password']
             );
