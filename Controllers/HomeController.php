@@ -10,8 +10,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // $event = new Event();
-        $events = Database::query('SELECT title, description, date, banner FROM events ORDER BY date ASC');
+        $events = Database::query('SELECT title, description, date, banner FROM events ORDER BY date DESC LIMIT 3');
         return $this->view('home.index', ['events' => $events]);
     }
 }

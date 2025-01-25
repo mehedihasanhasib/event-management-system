@@ -22,7 +22,7 @@ function route($name, $params = [])
     return $router->url($name, $params);
 }
 
-function redirect($url)
+function redirect($url = "/")
 {
     header("Location: $url");
     exit;

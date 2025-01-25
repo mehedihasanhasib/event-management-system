@@ -89,6 +89,32 @@ class Model
         return $this;
     }
 
+    public function paginate($page_no, $limit)
+    {
+        $offset = ($page_no - 1) * $limit;
+
+        // Fetch total count for pagination metadata
+        $stmt = $this->pdo->query("SELECT COUNT(*) AS total FROM {$this->table}");
+        $totalRecords = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+        $totalPages = ceil($totalRecords / $limit);
+
+        // Fetch paginated results
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->table} LIMIT :limit OFFSET :offset");
+        $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return [
+            'data' => $results,
+            'pagination' => [
+                'current_page' => $page_no,
+                'total_pages' => $totalPages,
+                'total_records' => $totalRecords,
+            ],
+        ];
+    }
+
     public function delete($id)
     {
         $stmt = $this->pdo->prepare("DELETE FROM {$this->table} WHERE {$this->primaryKey} = :id");

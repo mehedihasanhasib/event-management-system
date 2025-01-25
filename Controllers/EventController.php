@@ -5,6 +5,7 @@ namespace Controllers;
 use Core\Auth;
 use Helpers\File;
 use Models\Event;
+use Core\Database;
 use Core\Validator;
 use Core\Controller;
 use Core\Http\Request;
@@ -102,7 +103,7 @@ class EventController extends Controller
         try {
             $event = new Event();
             $old_event = $event->find($request->input('id'));
-            
+
             if ($request->hasFile('banner')) {
                 File::delete($old_event['banner']);
 
@@ -130,5 +131,19 @@ class EventController extends Controller
         } catch (\Throwable $th) {
             return json_response(['status' => false, 'errors' => 'Failed to update event'], 500);
         }
+    }
+
+    public function events(Request $request)
+    {
+        $page_no = $request->input('page') ?? 1;
+        if (!$page_no) {
+            redirect(route('events'));
+        }
+
+        $limit = 2;
+        $event = new Event();
+        // $events = Database::query('SELECT title, description, date, banner FROM events ORDER BY date DESC');
+        $events = $event->paginate($page_no, $limit);
+        return $this->view('events.user.index', ['events' => $events]);
     }
 }

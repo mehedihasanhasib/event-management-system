@@ -5,6 +5,7 @@ use Controllers\HomeController;
 use Middlewares\AuthMiddleware;
 
 $router->get('/', [HomeController::class, 'index'])->name('home');
+$router->get('/events', [EventController::class, 'events'])->name('events');
 
 $router->get('/my-events', [EventController::class, 'index'])->name('myevents')->middleware(AuthMiddleware::class);
 $router->get('/event/create', [EventController::class, 'create'])->name('event.create')->middleware(AuthMiddleware::class);
