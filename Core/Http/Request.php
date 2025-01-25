@@ -33,6 +33,19 @@ class Request
         return isset($this->files[$key]);
     }
 
+    public function query($key, $default = null)
+    {
+        return $_GET[$key] ?? $default;
+    }
+
+    // private function parseJson()
+    // {
+    //     if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
+    //         return json_decode(file_get_contents('php://input'), true) ?? [];
+    //     }
+    //     return [];
+    // }
+
     public function all()
     {
         if (!empty($this->files)) {

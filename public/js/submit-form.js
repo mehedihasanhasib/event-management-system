@@ -53,8 +53,9 @@ function submit(
         Object.entries(errorResponse).forEach(function (errors) {
           const str = errors[0];
           const className = str.includes(".") ? str.split(".")[0] : str;
+          console.log(className);
           const element = document.querySelector(`.${className}Error`);
-          element.innerText = errors[1][0];
+          element.innerText = errors[1];
         });
         notification({ icon: "error", text: "Validation Error" });
       }

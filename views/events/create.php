@@ -6,41 +6,61 @@
         <div class="col-md-8">
             <div class="card shadow">
                 <div class="card-body">
-                    <form action="process_event_create.php" method="POST">
+                    <form id="event-create-form" action="<?= route('event.store') ?>" method="POST">
                         <!-- Event Name -->
                         <div class="mb-3">
-                            <label for="eventName" class="form-label">Event Name</label>
-                            <input type="text" class="form-control" id="eventName" name="event_name" placeholder="Enter the event name" required>
+                            <label for="eventTitle" class="form-label">Event Title</label>
+                            <input type="text" class="form-control" id="eventTitle" name="event_title" placeholder="Enter the event title" required>
+                            <?php component('input-error', ['className' => ['event_titleError']]) ?>
+                        </div>
+
+                        <!-- Event Slug -->
+                        <div class="mb-3">
+                            <label for="eventName" class="form-label">Event Slug</label>
+                            <input type="text" class="form-control" id="eventSlug" name="event_slug" placeholder="Enter slug" required>
+                            <?php component('input-error', ['className' => ['event_slugError']]) ?>
                         </div>
 
                         <!-- Event Description -->
                         <div class="mb-3">
                             <label for="eventDescription" class="form-label">Event Description</label>
                             <textarea class="form-control" id="eventDescription" name="event_description" rows="4" placeholder="Provide a brief description of the event" required></textarea>
+                            <?php component('input-error', ['className' => ['event_descriptionError']]) ?>
                         </div>
 
                         <!-- Event Date -->
                         <div class="mb-3">
                             <label for="eventDate" class="form-label">Event Date</label>
                             <input type="date" class="form-control" id="eventDate" name="event_date" required>
+                            <?php component('input-error', ['className' => ['event_dateError']]) ?>
                         </div>
 
                         <!-- Event Time -->
                         <div class="mb-3">
                             <label for="eventTime" class="form-label">Event Time</label>
                             <input type="time" class="form-control" id="eventTime" name="event_time" required>
+                            <?php component('input-error', ['className' => ['event_timeError']]) ?>
                         </div>
 
                         <!-- Event Location -->
                         <div class="mb-3">
                             <label for="eventLocation" class="form-label">Event Location</label>
                             <input type="text" class="form-control" id="eventLocation" name="event_location" placeholder="Enter the event location" required>
+                            <?php component('input-error', ['className' => ['event_locationError']]) ?>
                         </div>
 
                         <!-- Maximum Capacity -->
                         <div class="mb-3">
                             <label for="maxCapacity" class="form-label">Maximum Capacity</label>
                             <input type="number" class="form-control" id="maxCapacity" name="max_capacity" placeholder="Enter the maximum number of attendees" required>
+                            <?php component('input-error', ['className' => ['max_capacityError']]) ?>
+                        </div>
+
+                        <!-- Banner -->
+                        <div class="mb-3">
+                            <label for="banner" class="form-label">Banner</label>
+                            <input type="file" class="form-control" id="banner" name="banner" required>
+                            <?php component('input-error', ['className' => ['bannerError']]) ?>
                         </div>
 
                         <!-- Submit Button -->
@@ -53,8 +73,26 @@
         </div>
     </div>
 </div>
+<?php $content = ob_get_clean(); ?>
+
+
+<?php ob_start() ?>
+<script>
+    $(document).ready(function() {
+        const eventCreateForm = $("#event-create-form")
+        eventCreateForm.on("submit", function(event) {
+            event.preventDefault()
+            const url = $(this).attr("action")
+            const formData = new FormData(this);
+            submit(url, formData, function() {
+                window.location.href = "<?= route('myevents') ?>"
+            });
+        })
+    })
+</script>
+<?php $script = ob_get_clean() ?>
+
 
 <?php
-$content = ob_get_clean();
-layout('master', compact('content'));
+layout('master', compact('content', 'script'));
 ?>

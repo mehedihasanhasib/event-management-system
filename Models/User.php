@@ -2,9 +2,10 @@
 
 namespace Models;
 
-use Models\Model;
+use Core\Model;
 
 class User extends Model
 {
     protected $table = 'users';
+    protected $hidden = ['password'];
 }

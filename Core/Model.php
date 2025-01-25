@@ -1,6 +1,6 @@
 <?php
 
-namespace Models;
+namespace Core;
 
 use PDO;
 use Core\Database;
@@ -9,6 +9,7 @@ class Model
 {
     protected $table;
     protected $primaryKey = 'id';
+    protected $hidden = [];
     protected $pdo;
 
     public function __construct()
@@ -33,9 +34,24 @@ class Model
     {
         $columns = implode(',', array_keys($data));
         $placeholders = ':' . implode(',:', array_keys($data));
-
         $stmt = $this->pdo->prepare("INSERT INTO {$this->table} ($columns) VALUES ($placeholders)");
-        return $stmt->execute($data);
+        $stmt->execute($data);
+        $lastInsertId = $this->pdo->lastInsertId();
+        $primaryKey = $this->primaryKey;
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->table} WHERE {$primaryKey} = :id");
+        $stmt->execute(['id' => $lastInsertId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $this->hideColumns($result);
+    }
+
+    public function hideColumns($row)
+    {
+        // Loop through the hidden columns array and unset them from the row
+        foreach ($this->hidden as $column) {
+            unset($row[$column]);
+        }
+        return $row; // Return the row with hidden columns removed
     }
 
     // public function update($id, $data) {
@@ -55,7 +71,8 @@ class Model
     {
         $stmt = $this->pdo->prepare("SELECT * FROM {$this->table} WHERE {$column} = :val");
         $stmt->execute(['val' => $value]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
     }
 
     public function delete($id)

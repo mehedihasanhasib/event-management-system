@@ -16,7 +16,7 @@
                             aria-expanded="false">
                             <div class="icon-circle">
                                 <img
-                                    src=" <?= auth()['profile_picture'] ?? asset('images/user-avatar/default-avatar.png') ?>"
+                                    src=" <?= auth()['profile_picture'] ? asset(auth()['profile_picture']) : asset('images/user-avatar/default-avatar.png') ?>"
                                     class="rounded-circle me-2"
                                     alt="User Avatar"
                                     style="max-width: 40px; max-height: 40px;">

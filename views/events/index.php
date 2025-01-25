@@ -5,7 +5,7 @@
 
     <!-- Add New Event Button -->
     <div class="mb-3 text-end">
-        <a href="event_create.php" class="btn btn-success">Add New Event</a>
+        <a href="<?= route('event.create') ?>" class="btn btn-success">Create New Event</a>
     </div>
 
     <!-- Events Table -->

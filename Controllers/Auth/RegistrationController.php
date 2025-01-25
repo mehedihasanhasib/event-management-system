@@ -18,8 +18,7 @@ class RegistrationController extends Controller
 
     public function store(Request $request)
     {
-        $validator = new Validator();
-        $validator->make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'name' => ['required', 'string'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'min:8'],
@@ -38,19 +37,16 @@ class RegistrationController extends Controller
                 $path = "uploads/";
                 $image = File::upload($file, $path);
             }
-            $user->create([
+            $new_user = $user->create([
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
                 'profile_picture' => $image ?? null,
                 'password' => password_hash($request->input('password'), PASSWORD_BCRYPT)
             ]);
-            Auth::login([
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'profile_picture' =>  $image ?? null,
-            ]);
+            Auth::login($new_user);
             return json_response(['status' => true, 'message' => 'Registration successful'], 201);
         } catch (\Throwable $th) {
+            dd($th->getMessage());
             return json_response(['status' => false, 'errors' => ['Something went worng! Try again']], 500);
         }
     }

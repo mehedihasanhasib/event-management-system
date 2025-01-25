@@ -9,7 +9,7 @@
 
 .sweet-alert-popup {
     border-radius: 10px;
-    background-color: #effdf5;
+    background-color: #0087b0;
     overflow: hidden;
 }
 
@@ -65,8 +65,8 @@
 
 /* toast */
 .sweet-alert-toast-popup{
-    background-color: #effdf5 !important;
+    background-color: #ffffff !important;
 }
 .sweet-alert-toast-progressBar{
-    background-color: #00b074 !important;
+    background-color: #0087b0 !important;
 }

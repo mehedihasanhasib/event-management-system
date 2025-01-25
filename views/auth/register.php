@@ -57,6 +57,7 @@ ob_start()
         </div>
     </div>
 </div>
+<?php $content = ob_get_clean(); ?>
 
 <?php ob_start() ?>
 <script>
@@ -76,6 +77,5 @@ ob_start()
 
 <?php
 $title = "Register";
-$content = ob_get_clean();
 layout('guest', compact('content', 'title', 'script'));
 ?>
