@@ -1,6 +1,5 @@
 <?php
 
-use Controllers\AttendeeController;
 use Controllers\EventController;
 use Controllers\HomeController;
 use Middlewares\AuthMiddleware;

@@ -12,7 +12,9 @@ class EventController extends Controller
 {
     public function index()
     {
-        return $this->view('events.index');
+        $events = new Event();
+        $events = $events->all();
+        return $this->view('events.index', ['events' => $events]);
     }
 
     public function create()
@@ -58,8 +60,7 @@ class EventController extends Controller
             ]);
             return json_response(['status' => true, 'message' => 'Event created successfully'], 201);
         } catch (\Throwable $th) {
-            dd($th->getMessage());
-            return json_response(['status' => false, 'message' => 'Failed to create event'], 500);
+            return json_response(['status' => false, 'errors' => 'Failed to create event'], 500);
         }
     }
 }
