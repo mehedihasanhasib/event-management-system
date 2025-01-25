@@ -16,6 +16,7 @@ function submit(
     contentType: false,
     dataType: "json",
     success: function (response) {
+      loader.classList.add("d-none");
       if (response.status) {
         Swal.fire({
           icon: "success",
@@ -33,14 +34,14 @@ function submit(
           title: response.message,
         });
       }
-      loader.classList.add("d-none");
     },
     error: function (xhr) {
+      loader.classList.add("d-none");
       const statusCode = xhr.status;
       const errorResponse = xhr.responseJSON.errors;
 
       if (statusCode == 500) {
-        notification({ icon: "error", text: errorResponse[0] });
+        notification({ icon: "error", text: errorResponse });
       }
 
       if (statusCode == 401) {
@@ -59,8 +60,6 @@ function submit(
         });
         notification({ icon: "error", text: "Validation Error" });
       }
-
-      loader.classList.add("d-none");
     },
   });
 }

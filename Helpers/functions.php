@@ -53,6 +53,12 @@ function auth()
     }
 }
 
+function public_path($path = "")
+{
+    // dd(str_replace('\\', "/", $path));
+    return BASE_PATH . "/" . str_replace('\\', "/", $path);
+}
+
 function dd($value)
 {
     echo '<pre>';

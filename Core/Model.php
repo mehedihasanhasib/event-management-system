@@ -11,10 +11,21 @@ class Model
     protected $primaryKey = 'id';
     protected $hidden = [];
     protected $pdo;
+    protected $result;
 
     public function __construct()
     {
         $this->pdo = Database::getInstance();
+    }
+
+    public function first()
+    {
+        return $this->result[0] ?? [];
+    }
+
+    public function get()
+    {
+        return $this->result ?? [];
     }
 
     public function all()
@@ -42,37 +53,40 @@ class Model
         $stmt->execute(['id' => $lastInsertId]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $this->hideColumns($result);
+        return $result;
     }
 
-    public function hideColumns($row)
-    {
-        // Loop through the hidden columns array and unset them from the row
-        foreach ($this->hidden as $column) {
-            unset($row[$column]);
-        }
-        return $row; // Return the row with hidden columns removed
-    }
-
-    // public function update($id, $data) {
-    //     $columns = '';
-    //     foreach ($data as $key => $value) {
-    //         $columns .= "{$key} = :{$key}, ";
+    // public function hideColumns($row)
+    // {
+    //     // Loop through the hidden columns array and unset them from the row
+    //     foreach ($this->hidden as $column) {
+    //         unset($row[$column]);
     //     }
-    //     $columns = rtrim($columns, ', ');
-
-    //     $data[$this->primaryKey] = $id; // Add the primary key to the parameters
-
-    //     $stmt = $this->pdo->prepare("UPDATE {$this->table} SET {$columns} WHERE {$this->primaryKey} = :{$this->primaryKey}");
-    //     return $stmt->execute($data);
+    //     return $row; // Return the row with hidden columns removed
     // }
+
+    public function update($id, $data)
+    {
+        $columns = '';
+        foreach ($data as $key => $value) {
+            $columns .= "{$key} = :{$key}, ";
+        }
+        $columns = rtrim($columns, ', ');
+
+        $data[$this->primaryKey] = $id;
+
+        $stmt = $this->pdo->prepare("UPDATE {$this->table} SET {$columns} WHERE {$this->primaryKey} = :{$this->primaryKey}");
+        return $stmt->execute($data);
+    }
 
     public function where($column, $value)
     {
         $stmt = $this->pdo->prepare("SELECT * FROM {$this->table} WHERE {$column} = :val");
         $stmt->execute(['val' => $value]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result;
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $this->result = $result;
+
+        return $this;
     }
 
     public function delete($id)

@@ -67,10 +67,10 @@ class Router
                     http_response_code(405);
                     die("$method method is not supported on this route\n");
                 }
-                // dd($route['middleware']);
                 if ($route['middleware'] != null) {
                     (new $route['middleware'])->handle();
                 }
+
                 $controller = new $route['controller'][0]();
                 $method = $route['controller'][1];
                 $request = new Request();

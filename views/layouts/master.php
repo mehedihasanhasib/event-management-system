@@ -44,6 +44,7 @@
 
     <script src="<?= asset('js/submit-form.js') ?>"></script>
     <script src="<?= asset('js/alert.js') ?>"></script>
+    <script src="<?= asset('js/image-preview.js') ?>"></script>
     <?= $script ?? "" ?>
 </body>
 

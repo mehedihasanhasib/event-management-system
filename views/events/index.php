@@ -33,7 +33,7 @@
                             <td><?= htmlspecialchars($event['location']); ?></td>
                             <td><?= htmlspecialchars($event['capacity']); ?></td>
                             <td>
-                                <a href="event_edit.php?id=<?= $event['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="<?= route('event.edit')."?id={$event['id']}" ?>" class="btn btn-sm btn-warning">Edit</a>
                                 <a href="event_delete.php?id=<?= $event['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this event?');">Delete</a>
                             </td>
                         </tr>

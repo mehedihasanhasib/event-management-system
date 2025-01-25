@@ -61,11 +61,14 @@
                             <label for="banner" class="form-label">Banner</label>
                             <input type="file" class="form-control" id="banner" name="banner" required>
                             <?php component('input-error', ['className' => ['bannerError']]) ?>
+                            <div class="mt-3 d-flex justify-content-center">
+                                <img id="banner-preview" src="" alt="Profile Picture Preview" style="max-width: 100%;max-height: 50vh;object-fit:cover;display: none;" />
+                            </div>
                         </div>
 
                         <!-- Submit Button -->
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary btn-lg">Create Event</button>
+                            <button type="submit" class="btn btn-primary btn-lg">Create</button>
                         </div>
                     </form>
                 </div>
@@ -80,6 +83,12 @@
 <script>
     $(document).ready(function() {
         const eventCreateForm = $("#event-create-form")
+        const bannerInput = $("#banner")
+
+        bannerInput.on("change", function(event) {
+            preview(event, "banner-preview")
+        })
+
         eventCreateForm.on("submit", function(event) {
             event.preventDefault()
             const url = $(this).attr("action")

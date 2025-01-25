@@ -18,7 +18,7 @@
     }
 
     .event-card img {
-        height: 200px;
+        height: 25vh;
         object-fit: cover;
     }
 </style>
@@ -39,18 +39,23 @@
 <div class="container my-5">
     <h2 class="text-center mb-4">Upcoming Events</h2>
     <div class="row g-4">
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="card event-card shadow">
-                <img src="https://picsum.photos/400/200" class="card-img-top" alt="Event 1">
-                <div class="card-body">
-                    <h5 class="card-title">Tech Conference 2025</h5>
-                    <p class="card-text">Join industry leaders to discuss the future of technology. Networking opportunities available!</p>
-                    <p><strong>Date:</strong> Feb 25, 2025</p>
-                    <a href="#" class="btn btn-primary">Register Now</a>
+        <?php foreach ($events as $event): ?>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card event-card shadow">
+                    <img src="<?= $event['banner'] ?>" class="card-img-top" alt="<?= $event['title'] ?>">
+                    <div class="card-body">
+                        <h5 class="card-title"><?= $event['title'] ?></h5>
+                        <p class="card-text"><?= substr($event['description'], 0, 50) . " ..." ?></p>
+                        <p><strong>Date:</strong> <?= $event['date'] ?></p>
+                        <div>
+                            <a href="#" class="btn btn-primary">Register Now</a>
+                            <a href="#" class="btn btn-secondary">Details</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-12 col-md-6 col-lg-4">
+        <?php endforeach; ?>
+        <!-- <div class="col-12 col-md-6 col-lg-4">
             <div class="card event-card shadow">
                 <img src="https://picsum.photos/400/200" class="card-img-top" alt="Event 2">
                 <div class="card-body">
@@ -71,7 +76,7 @@
                     <a href="#" class="btn btn-primary">Register Now</a>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
 

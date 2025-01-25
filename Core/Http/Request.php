@@ -7,15 +7,15 @@ class Request
     protected $data;
     protected $files;
 
-    public function __construct($data = null)
+    public function __construct()
     {
-        $this->data = $data ?? $_POST;
-        // $this->files = $_FILES;
+        $this->data = !empty($_POST) ? $_POST : $_GET;
         foreach ($_FILES as $key => $file) {
             if ($file['size']) {
                 $this->files[$key] = $file;
             }
         }
+        // $this->files = $_FILES;
     }
 
     public function input($key, $default = null)
@@ -31,6 +31,11 @@ class Request
     public function hasFile($key)
     {
         return isset($this->files[$key]);
+    }
+
+    public function has($key)
+    {
+        return isset($this->data[$key]);
     }
 
     public function query($key, $default = null)

@@ -9,9 +9,18 @@ class File
         if (!is_dir($outputPath)) {
             mkdir($outputPath, 0755, true);
         }
-        $upload_path = $outputPath . trim(basename($file["name"]));
+        $fileName = time() . "_" . trim(basename($file["name"]));
+        $upload_path = $outputPath . $fileName;
         move_uploaded_file($file["tmp_name"], $upload_path);
 
         return $upload_path;
+    }
+
+    public static function delete($filePath)
+    {
+        if (file_exists($filePath)) {
+            unlink($filePath);
+            return true;
+        }
     }
 }

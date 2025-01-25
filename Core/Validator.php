@@ -56,7 +56,7 @@ class Validator
                             break;
 
                         case 'image':
-                            $image = @imagecreatefromstring(file_get_contents($data[$field]['tmp_name']));
+                            $image = @imagecreatefromstring(file_get_contents($data[$field]['tmp_name'] ?? null));
                             if ($image === false) {
                                 self::$errors[$field][] = "Invalid image file.";
                             }
@@ -64,7 +64,8 @@ class Validator
                         case str_starts_with($rule, 'size:'):
                             $maxSize = (int) substr($rule, 5) * 1024; // Convert KB to Bytes
                             if (($data[$field]['size'] ?? 0) > $maxSize) {
-                                self::$errors[$field][] = "The $field field must not exceed $maxSize KB.";
+                                $mb = $maxSize / 1024 / 1024;
+                                self::$errors[$field][] = "The $field field must not exceed {$mb} MB.";
                             }
                             break;
                         case str_starts_with($rule, 'mimes:'):
