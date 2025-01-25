@@ -35,7 +35,7 @@ function json_response($data, $status_code = 200)
     header('Content-Type: application/json');
     $response = $data;
     echo json_encode($response);
-    // exit;
+    exit;
 }
 
 function asset($path)
