@@ -7,13 +7,33 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <?php if (auth()): ?>
-                    <li class="nav-item"><a class="nav-link" href="<?= route('myevents') ?>">My Events</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= "" ?>">My Bookings</a></li>
-                    <li class="nav-item">
-                        <form action="<?= route('logout') ?>" method="POST">
-                            <button class="nav-link" href="<?= "" ?>">Log out</button>
-                        </form>
-                    </li>
+                    <div class="dropdown">
+                        <a
+                            href="#"
+                            class="d-flex align-items-center text-decoration-none dropdown-toggle"
+                            id="userDropdown"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <div class="icon-circle">
+                                <img
+                                    src=" <?= auth()['profile_picture'] ?? asset('images/user-avatar/default-avatar.png') ?>"
+                                    class="rounded-circle me-2"
+                                    alt="User Avatar"
+                                    style="max-width: 40px; max-height: 40px;">
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <a class="dropdown-item" href="<?= route('myevents') ?>">My Events</a>
+                            </li>
+                            <li>
+                                <form action="<?= route('logout') ?>" method="POST" class="d-inline">
+                                    <button type="submit" class="dropdown-item">Log out</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+
                 <?php else: ?>
                     <li class="nav-item"><a class="nav-link" href="<?= route('login') ?>">Login</a></li>
                     <li class="nav-item"><a class="nav-link" href="<?= route('register') ?>">Register</a></li>

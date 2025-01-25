@@ -14,6 +14,7 @@ spl_autoload_register(function ($class) {
 
 require_once BASE_PATH . "/Core/Router.php";
 
+// dd(auth());
 
 $router = new \Core\Router();
 

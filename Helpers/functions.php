@@ -1,4 +1,7 @@
 <?php
+
+use Core\Auth;
+
 function layout(string $layout, array $data = [])
 {
     $layout_folder = ".views.layouts.";
@@ -44,7 +47,7 @@ function asset($path)
 function auth()
 {
     if (\Core\Session::get('auth')) {
-        return true;
+        return Auth::user();
     } else {
         return false;
     }

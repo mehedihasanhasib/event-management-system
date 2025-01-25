@@ -16,6 +16,7 @@ class Auth
     public static function user()
     {
         return Session::get('user') ?? null;
+
     }
 
     public static function attempt($credentials = [])

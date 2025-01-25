@@ -44,7 +44,11 @@ class RegistrationController extends Controller
                 'profile_picture' => $image ?? null,
                 'password' => password_hash($request->input('password'), PASSWORD_BCRYPT)
             ]);
-            Auth::login(['name' => $request->input('name'), 'email' => $request->input('email')]);
+            Auth::login([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'profile_picture' =>  $image ?? null,
+            ]);
             return json_response(['status' => true, 'message' => 'Registration successful'], 201);
         } catch (\Throwable $th) {
             return json_response(['status' => false, 'errors' => ['Something went worng! Try again']], 500);
