@@ -9,19 +9,27 @@ use Core\Database;
 use Core\Validator;
 use Core\Controller;
 use Core\Http\Request;
+use Helpers\DB;
+use Models\Location;
 
 class EventController extends Controller
 {
     public function index()
     {
+        $user_id = auth()['id'];
         $events = new Event();
-        $events = $events->where('user_id', "=", auth()['id'])->get();
+        $events = DB::query("SELECT events.*, locations.name AS location_name 
+        FROM events JOIN locations ON events.location_id = locations.id WHERE user_id = :user_id", [
+            'user_id' => $user_id,
+        ]);
+
         return $this->view('events.index', ['events' => $events]);
     }
 
     public function create()
     {
-        return $this->view('events.create');
+        $locations = DB::query("SELECT * FROM locations ORDER BY name ASC");
+        return $this->view('events.create', ['locations' => $locations]);
     }
 
     public function store(Request $request)
@@ -32,7 +40,7 @@ class EventController extends Controller
             'event_description' => ['required', 'string', 'max:1000'],
             'event_date' => ['required'],
             'event_time' => ['required'],
-            'event_location' => ['required'],
+            'location' => ['required'],
             'max_capacity' => ['required'],
             'banner' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'size:2048'],
         ]);
@@ -58,7 +66,7 @@ class EventController extends Controller
                 'banner' => $image,
                 'date' => $request->input('event_date'),
                 'time' => $request->input('event_time'),
-                'location' => $request->input('event_location'),
+                'location_id' => $request->input('location'),
                 'capacity' => $request->input('max_capacity'),
             ]);
             return json_response(['status' => true, 'message' => 'Event created successfully'], 201);
@@ -73,12 +81,14 @@ class EventController extends Controller
             return redirect(route('myevents'));
         }
 
-        $id = $request->input('id');
-        $event = new Event();
-        $event = $event->find($id);
-        if (Auth::authorize($event['user_id'])) {
-            return $this->view('events.edit', ['event' => $event]);
-        }
+        $event_id = $request->input('id');
+        $user_id = auth()['id'];
+        $events = DB::query('SELECT events.*, locations.name FROM events JOIN locations ON events.location_id = locations.id WHERE events.id = :event_id AND user_id = :user_id', [
+            'event_id' => $event_id,
+            'user_id' => $user_id
+        ]);
+        $locations = DB::query("SELECT * FROM locations ORDER BY name ASC");
+        return $this->view('events.edit', ['event' => $events[0], 'locations' => $locations]);
     }
 
     public function update(Request $request)
@@ -89,7 +99,7 @@ class EventController extends Controller
             'event_description' => ['required', 'string', 'max:1000'],
             'event_date' => ['required'],
             'event_time' => ['required'],
-            'event_location' => ['required'],
+            'location' => ['required'],
             'max_capacity' => ['required'],
             'banner' => ['image', 'mimes:jpg,jpeg,png,webp', 'size:2048'],
         ]);
@@ -121,7 +131,7 @@ class EventController extends Controller
                     'banner' => $image ?? $old_event['banner'],
                     'date' => $request->input('event_date'),
                     'time' => $request->input('event_time'),
-                    'location' => $request->input('event_location'),
+                    'location_id' => $request->input('location'),
                     'capacity' => $request->input('max_capacity'),
                 ]);
             }
@@ -134,7 +144,7 @@ class EventController extends Controller
 
     public function events(Request $request)
     {
-        // try {
+        try {
             $event = new Event();
 
             $events = $event->when($request->has('date'), function ($query) use ($request) {
@@ -146,8 +156,8 @@ class EventController extends Controller
             })->paginate(3);
 
             return $this->view('events.user.index', ['events' => $events]);
-        // } catch (\Throwable $th) {
-        //     die($th->getMessage());
-        // }
+        } catch (\Throwable $th) {
+            die($th->getMessage());
+        }
     }
 }

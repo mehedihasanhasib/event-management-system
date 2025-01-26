@@ -44,9 +44,14 @@
 
                         <!-- Event Location -->
                         <div class="mb-3">
-                            <label for="eventLocation" class="form-label">Event Location</label>
-                            <input type="text" class="form-control" id="eventLocation" name="event_location" placeholder="Enter the event location" required>
-                            <?php component('input-error', ['className' => ['event_locationError']]) ?>
+                            <label class="form-label">Event Location</label>
+                            <select class="form-select" name="location" required>
+                                <option value="">Select Location</option>
+                                <?php foreach ($locations as $location) : ?>
+                                    <option value="<?= $location['id'] ?>"><?= $location['name'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <?php component('input-error', ['className' => ['locationError']]) ?>
                         </div>
 
                         <!-- Maximum Capacity -->

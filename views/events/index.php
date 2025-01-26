@@ -30,7 +30,7 @@
                             <td><?= htmlspecialchars($event['title']); ?></td>
                             <td><?= htmlspecialchars(substr($event['description'], 0, 70) . " ..."); ?></td>
                             <td><?= htmlspecialchars($event['date']); ?></td>
-                            <td><?= htmlspecialchars($event['location']); ?></td>
+                            <td><?= htmlspecialchars($event['location_name']); ?></td>
                             <td><?= htmlspecialchars($event['capacity']); ?></td>
                             <td>
                                 <a href="<?= route('event.edit')."?id={$event['id']}" ?>" class="btn btn-sm btn-warning">Edit</a>
