@@ -9,115 +9,212 @@ class Model
 {
     protected $table;
     protected $primaryKey = 'id';
-    protected $hidden = [];
     protected $pdo;
-    protected $result;
+    protected $query;
+    protected $bindings = [];
+    protected $totalRecords;
 
     public function __construct()
     {
         $this->pdo = Database::getInstance();
     }
 
+    public function when($condition, callable $callback)
+    {
+        if ($condition) {
+            $callback($this);
+        }
+        return $this;
+    }
+
+    // Fetch the first result
     public function first()
     {
-        return $this->result[0] ?? [];
+        if ($this->query) {
+            $this->query .= " LIMIT 1";
+        } else {
+            $this->query = "SELECT * FROM $this->table LIMIT 1";
+        }
+        $stmt = $this->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
     }
 
+    // Fetch all results
     public function get()
     {
-        return $this->result ?? [];
+        if (!$this->query) {
+            $this->query = "SELECT * FROM $this->table";
+        }
+        $stmt = $this->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    // Fetch all records from the table
     public function all()
     {
         $stmt = $this->pdo->query("SELECT * FROM {$this->table}");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    // Find a record by ID
     public function find($id)
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->table} WHERE {$this->primaryKey} = :id");
-        $stmt->execute(['id' => $id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->query = "SELECT * FROM {$this->table} WHERE {$this->primaryKey} = :id";
+        $this->bindings = ['id' => $id];
+        return $this->first();
     }
 
-    public function create($data)
+    // Insert a new record
+    public function create(array $data)
     {
         $columns = implode(',', array_keys($data));
         $placeholders = ':' . implode(',:', array_keys($data));
-        $stmt = $this->pdo->prepare("INSERT INTO {$this->table} ($columns) VALUES ($placeholders)");
-        $stmt->execute($data);
-        $lastInsertId = $this->pdo->lastInsertId();
-        $primaryKey = $this->primaryKey;
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->table} WHERE {$primaryKey} = :id");
-        $stmt->execute(['id' => $lastInsertId]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->query = "INSERT INTO {$this->table} ($columns) VALUES ($placeholders)";
 
-        return $result;
+        $this->bindings = $data;
+        $this->execute();
+
+        $id = $this->pdo->lastInsertId();
+        return $this->find($id);
     }
 
-    // public function hideColumns($row)
-    // {
-    //     // Loop through the hidden columns array and unset them from the row
-    //     foreach ($this->hidden as $column) {
-    //         unset($row[$column]);
-    //     }
-    //     return $row; // Return the row with hidden columns removed
-    // }
-
-    public function update($id, $data)
+    // Update a record by ID
+    public function update($id, array $data)
     {
-        $columns = '';
-        foreach ($data as $key => $value) {
-            $columns .= "{$key} = :{$key}, ";
+        $columns = implode(', ', array_map(fn($col) => "{$col} = :{$col}", array_keys($data)));
+        $this->query = "UPDATE {$this->table} SET $columns WHERE {$this->primaryKey} = :id";
+
+        $this->bindings = array_merge($data, ['id' => $id]);
+        return $this->execute();
+    }
+
+    // Delete a record by ID
+    public function delete($id)
+    {
+        $this->query = "DELETE FROM {$this->table} WHERE {$this->primaryKey} = :id";
+        $this->bindings = ['id' => $id];
+        return $this->execute();
+    }
+
+    // WHERE clause
+    public function where($column, $operator = "=", $value)
+    {
+        $this->addCondition("{$column} {$operator} :{$column}");
+        $this->bindings[$column] = $value;
+        return $this;
+    }
+
+    // WHERE IN clause
+    public function whereIn($column, array $values)
+    {
+        $placeholders = implode(',', array_map(fn($key) => ":{$column}_{$key}", array_keys($values)));
+        $this->addCondition("{$column} IN ({$placeholders})");
+
+        foreach ($values as $key => $value) {
+            $this->bindings["{$column}_{$key}"] = $value;
         }
-        $columns = rtrim($columns, ', ');
-
-        $data[$this->primaryKey] = $id;
-
-        $stmt = $this->pdo->prepare("UPDATE {$this->table} SET {$columns} WHERE {$this->primaryKey} = :{$this->primaryKey}");
-        return $stmt->execute($data);
-    }
-
-    public function where($column, $value)
-    {
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->table} WHERE {$column} = :val");
-        $stmt->execute(['val' => $value]);
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $this->result = $result;
 
         return $this;
     }
 
-    public function paginate($page_no, $limit)
+    // WHERE BETWEEN clause
+    public function whereBetween($column, array $values)
     {
-        $offset = ($page_no - 1) * $limit;
+        if (count($values) !== 2) {
+            throw new \InvalidArgumentException("The whereBetween method requires exactly two values.");
+        }
 
-        // Fetch total count for pagination metadata
-        $stmt = $this->pdo->query("SELECT COUNT(*) AS total FROM {$this->table}");
-        $totalRecords = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
-        $totalPages = ceil($totalRecords / $limit);
+        $this->addCondition("{$column} BETWEEN :{$column}_start AND :{$column}_end");
+        $this->bindings["{$column}_start"] = $values[0];
+        $this->bindings["{$column}_end"] = $values[1];
 
-        // Fetch paginated results
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->table} LIMIT :limit OFFSET :offset");
-        $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
-        $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+        return $this;
+    }
+
+    // WHERE LIKE clause
+    public function whereLike($column, $value)
+    {
+        $this->addCondition("{$column} LIKE :{$column}");
+        $this->bindings[$column] = "%{$value}%";
+        return $this;
+    }
+
+    // Dynamic pagination
+    public function paginate($limit = 10)
+    {
+        $page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT) ?: 1;
+        $offset = ($page - 1) * $limit;
+
+        $countQuery = "SELECT COUNT(*) AS total FROM {$this->table}";
+        $baseQuery = $this->query;
+
+        if (strpos($baseQuery, 'WHERE') !== false) {
+            $countQuery .= ' ' . strstr($baseQuery, 'WHERE');
+        }
+
+        $stmt = $this->pdo->prepare($countQuery);
+        foreach ($this->bindings as $key => $value) {
+            $stmt->bindValue(is_int($key) ? $key + 1 : ":$key", $value);
+        }
         $stmt->execute();
+        $totalRecords = $stmt->fetchColumn();
+
+        if ($this->query) {
+            $this->query .= " LIMIT :limit OFFSET :offset";
+        } else {
+            $this->query = "SELECT * FROM {$this->table} LIMIT :limit OFFSET :offset";
+        }
+
+        $this->bindings['limit'] = (int)$limit;
+        $this->bindings['offset'] = (int)$offset;
+
+        $stmt = $this->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return [
             'data' => $results,
             'pagination' => [
-                'current_page' => $page_no,
-                'total_pages' => $totalPages,
+                'current_page' => $page,
+                'total_pages' => ceil($totalRecords / $limit),
                 'total_records' => $totalRecords,
             ],
         ];
     }
 
-    public function delete($id)
+    // Add raw conditions to the query
+    protected function addCondition($condition)
     {
-        $stmt = $this->pdo->prepare("DELETE FROM {$this->table} WHERE {$this->primaryKey} = :id");
-        return $stmt->execute(['id' => $id]);
+        if (strpos($this->query, 'WHERE') === false) {
+            $this->query = "SELECT * FROM {$this->table} WHERE {$condition}";
+        } else {
+            $this->query .= " AND {$condition}";
+        }
+    }
+
+    // Execute the query with bindings
+    protected function execute()
+    {
+        $stmt = $this->pdo->prepare($this->query);
+
+        foreach ($this->bindings as $key => $value) {
+            $stmt->bindValue(
+                is_int($key) ? $key + 1 : ":$key",
+                $value,
+                is_bool($value)
+                    ? PDO::PARAM_BOOL
+                    : (is_numeric($value)
+                        ? PDO::PARAM_INT
+                        : PDO::PARAM_STR)
+            );
+        }
+
+        $stmt->execute();
+        $this->totalRecords = $stmt->rowCount();
+        return $stmt;
+    }
+
+    protected function toSQL()
+    {
+        return $this->query;
     }
 }

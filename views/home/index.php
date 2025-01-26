@@ -78,6 +78,10 @@
             </div>
         </div> -->
     </div>
+
+    <div class="d-flex justify-content-center mt-4">
+        <a class="btn btn-success" href="<?= route('events') ?>">See More</a>
+    </div>
 </div>
 
 <?php $content = ob_get_clean(); ?>

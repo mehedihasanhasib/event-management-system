@@ -15,8 +15,7 @@ class EventController extends Controller
     public function index()
     {
         $events = new Event();
-        $events = $events->where('user_id', auth()['id'])->get();
-        // dd(auth()['id']);
+        $events = $events->where('user_id', "=", auth()['id'])->get();
         return $this->view('events.index', ['events' => $events]);
     }
 
@@ -135,15 +134,20 @@ class EventController extends Controller
 
     public function events(Request $request)
     {
-        $page_no = $request->input('page') ?? 1;
-        if (!$page_no) {
-            redirect(route('events'));
-        }
+        // try {
+            $event = new Event();
 
-        $limit = 2;
-        $event = new Event();
-        // $events = Database::query('SELECT title, description, date, banner FROM events ORDER BY date DESC');
-        $events = $event->paginate($page_no, $limit);
-        return $this->view('events.user.index', ['events' => $events]);
+            $events = $event->when($request->has('date'), function ($query) use ($request) {
+                return $query->where('date', "=", $request->input('date'));
+            })->when($request->has('title'), function ($query) use ($request) {
+                return $query->whereLike('title', $request->input('title'));
+            })->when($request->has('location'), function ($query) use ($request) {
+                return $query->where('location', "=", $request->input('location'));
+            })->paginate(3);
+
+            return $this->view('events.user.index', ['events' => $events]);
+        // } catch (\Throwable $th) {
+        //     die($th->getMessage());
+        // }
     }
 }

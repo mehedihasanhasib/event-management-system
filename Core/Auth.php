@@ -21,7 +21,7 @@ class Auth
     public static function attempt($credentials = [])
     {
         $user = new User();
-        return $user->where('email', $credentials['email'])->first();
+        return $user->where('email', "=", $credentials['email'])->first();
     }
 
     public static function authorize($user_id = null)
