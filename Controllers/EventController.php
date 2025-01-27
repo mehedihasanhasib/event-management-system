@@ -141,23 +141,4 @@ class EventController extends Controller
             return json_response(['status' => false, 'errors' => 'Failed to update event'], 500);
         }
     }
-
-    public function events(Request $request)
-    {
-        try {
-            $event = new Event();
-
-            $events = $event->when($request->has('date'), function ($query) use ($request) {
-                return $query->where('date', "=", $request->input('date'));
-            })->when($request->has('title'), function ($query) use ($request) {
-                return $query->whereLike('title', $request->input('title'));
-            })->when($request->has('location'), function ($query) use ($request) {
-                return $query->where('location', "=", $request->input('location'));
-            })->paginate(3);
-
-            return $this->view('events.user.index', ['events' => $events]);
-        } catch (\Throwable $th) {
-            die($th->getMessage());
-        }
-    }
 }

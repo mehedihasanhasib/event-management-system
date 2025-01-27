@@ -1,11 +1,12 @@
 <?php
 
-use Controllers\EventController;
 use Controllers\HomeController;
 use Middlewares\AuthMiddleware;
+use Controllers\EventController;
+use Controllers\EventUserController;
 
 $router->get('/', [HomeController::class, 'index'])->name('home');
-$router->get('/events', [EventController::class, 'events'])->name('events');
+$router->get('/events', [EventUserController::class, 'index'])->name('events');
 
 $router->get('/my-events', [EventController::class, 'index'])->name('myevents')->middleware(AuthMiddleware::class);
 $router->get('/event/create', [EventController::class, 'create'])->name('event.create')->middleware(AuthMiddleware::class);

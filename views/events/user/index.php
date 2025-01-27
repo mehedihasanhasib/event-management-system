@@ -52,110 +52,108 @@
 <?php ob_start(); ?>
 <div class="container my-5">
     <!-- Filter Form -->
-    <form id="filterForm" class="mb-4" method="GET" action="<?= route('events') ?>">
-        <div class="row">
-            <div class="col-md-4">
-                <input type="text" class="form-control" name="title" value="<?= $_GET['title'] ?? '' ?>" placeholder="Search By Title">
-            </div>
+    <form id="filterForm" class="mb-4 p-3 border rounded shadow-sm" method="GET" action="<?= route('events') ?>">
+        <?php
+        $title = $_GET['title'] ?? "";
+        $date_from = $_GET['date_from'] ?? "";
+        $date_to = $_GET['date_to'] ?? "";
+        $location_id = $_GET['location'] ?? 0;
+        ?>
+        <div class="row g-3">
+            <!-- Title -->
             <div class="col-md-3">
-                <input type="text" class="form-control" name="location" value="<?= $_GET['location'] ?? '' ?>" placeholder="Search By Location">
+                <label class="form-label fw-semibold">Title</label>
+                <input type="text" class="form-control" name="title" value="<?= $title ?>" placeholder="Search By Title">
             </div>
+
+            <!-- Location -->
             <div class="col-md-3">
-                <input type="date" class="form-control" value="<?= $_GET['date'] ?? '' ?>" name="date">
+                <label class="form-label fw-semibold">Location</label>
+                <select class="form-select" name="location">
+                    <option value="">Select Location</option>
+                    <?php foreach ($locations as $location) : ?>
+                        <option <?= $location['id'] == $location_id ? 'selected' : '' ?> value="<?= $location['id'] ?>"><?= $location['name'] ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100">Filter</button>
+
+            <!-- Date From -->
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Date From</label>
+                <input type="date" class="form-control" name="date_from" value="<?= $date_from ?>" name="date_from">
+            </div>
+
+            <!-- Date To -->
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Date To</label>
+                <input type="date" class="form-control" name="date_to" value="<?= $date_to ?>" name="date_to">
+            </div>
+
+            <!-- Submit Button -->
+            <div class="col-12 d-flex gap-2 text-end">
+                <button type="submit" class="btn btn-primary btn-lg w-100">Filter</button>
+                <a href="<?= route('events') ?>" class="btn btn-secondary btn-lg w-100" id="resetFilter">Reset</a>
             </div>
         </div>
     </form>
     <div class="row g-4">
         <?php foreach ($events['data'] as $event): ?>
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="card event-card shadow">
-                    <img src="<?= $event['banner'] ?>" class="card-img-top" alt="<?= $event['title'] ?>">
-                    <div class="card-body">
-                        <h5 class="card-title"><?= $event['title'] ?></h5>
-                        <p class="card-text"><?= substr($event['description'], 0, 50) . " ..." ?></p>
-                        <p><strong>Date:</strong> <?= $event['date'] ?></p>
-                        <div>
-                            <a href="#" class="btn btn-primary">Register Now</a>
-                            <a href="#" class="btn btn-secondary">Details</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?php component('event-card', ['event' => $event]) ?>
         <?php endforeach; ?>
     </div>
 </div>
 <!-- Pagination Controls -->
 <div class="d-flex justify-content-center mt-4">
-    <nav>
-        <ul class="pagination">
-            <?php
-            $currentPage = $events['pagination']['current_page'];
-            $totalPages = $events['pagination']['total_pages'];
-            $previous = max(1, $currentPage - 1);
-            $next = min($totalPages, $currentPage + 1);
-            $queryString = $_GET;
-            unset($queryString['page']);
-            $queryString = http_build_query($queryString) . "&";
-            ?>
+    <?php
+    $currentPage = $events['pagination']['current_page'];
+    $totalPages = $events['pagination']['total_pages'];
+    $previous = max(1, $currentPage - 1);
+    $next = min($totalPages, $currentPage + 1);
+    $queryString = $_GET;
+    unset($queryString['page']);
+    $queryString = http_build_query($queryString) . "&";
 
-            <!-- Previous Link -->
-            <li class="page-item">
-                <a
-                    class="page-link"
-                    href="<?= $currentPage > 1 ? route('events') . "?{$queryString}page={$previous}" : '#' ?>"
-                    aria-disabled="<?= $currentPage == 1 ? 'true' : 'false' ?>"
-                    aria-label="Previous Page">
-                    Previous
-                </a>
-            </li>
+    component('pagination', [
+        'currentPage' => $currentPage,
+        'totalPages' => $totalPages,
+        'previous' => $previous,
+        'next' => $next,
+        'queryString' => $queryString
+    ])
+    ?>
 
-            <!-- Page Links -->
-            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                <li class="page-item">
-                    <a
-                        class="page-link"
-                        href="<?= $i != $currentPage ? route('events') . "?{$queryString}page={$i}" : '#' ?>"
-                        aria-current="<?= $i == $currentPage ? 'page' : 'false' ?>"
-                        aria-disabled="<?= $i == $currentPage ? 'true' : 'false' ?>"
-                        aria-label="Go to page <?= $i ?>">
-                        <?= $i ?>
-                    </a>
-                </li>
-            <?php endfor; ?>
-
-            <!-- Next Link -->
-            <li class="page-item">
-                <a
-                    class="page-link"
-                    href="<?= $currentPage < $totalPages ? route('events') . "?{$queryString}page={$next}" : '#' ?>"
-                    aria-disabled="<?= $currentPage == $totalPages ? 'true' : 'false' ?>"
-                    aria-label="Next Page">
-                    Next
-                </a>
-            </li>
-        </ul>
-    </nav>
+    <!-- <div> -->
+    
+    <!-- </div> -->
 </div>
 
 <?php ob_start() ?>
 <script>
     $("#filterForm").on("submit", function(event) {
         event.preventDefault();
-        // get all fields value, remove empty field's name attribute
-        const inputs = $(this).find("input")
 
-        inputs.each(function(index, input) {
-            if (!input.value) {
-                input.removeAttribute("name");
-            }
-        })
+        const dateFrom = $("input[name='date_from']").val().trim();
+        const dateTo = $("input[name='date_to']").val().trim();
 
-        this.submit();
+        if ((dateFrom && !dateTo) || (!dateFrom && dateTo)) {
+            alert("Please provide both 'Date From' and 'Date To' fields, or leave both empty.");
+            return;
+        }
 
-    })
+        let formData = $(this).serializeArray();
+
+        formData = formData.filter(function(field) {
+            return field.value.trim() !== "";
+        });
+
+        const filteredFormData = new URLSearchParams();
+        formData.forEach(function(field) {
+            filteredFormData.append(field.name, field.value);
+        });
+
+        const actionUrl = $(this).attr("action");
+        window.location.href = `${actionUrl}?${filteredFormData.toString()}`;
+    });
 </script>
 
 <?php $script = ob_get_clean(); ?>

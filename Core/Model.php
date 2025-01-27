@@ -194,6 +194,7 @@ class Model
     // Execute the query with bindings
     protected function execute()
     {
+        // dd($this->query);
         $stmt = $this->pdo->prepare($this->query);
 
         foreach ($this->bindings as $key => $value) {
