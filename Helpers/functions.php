@@ -59,6 +59,11 @@ function public_path($path = "")
     return BASE_PATH . "/" . str_replace('\\', "/", $path);
 }
 
+function isRoute($path)
+{
+    return parse_url($_SERVER["REQUEST_URI"])["path"] === $path;
+}
+
 function dd($value)
 {
     echo '<pre>';

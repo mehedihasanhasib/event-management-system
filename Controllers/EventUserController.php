@@ -11,7 +11,6 @@ class EventUserController extends Controller
 {
     public function index(Request $request)
     {
-        // dd($request->all());
         try {
             $event = new Event();
 
@@ -21,7 +20,7 @@ class EventUserController extends Controller
                 return $query->where('location_id', "=", $request->input('location'));
             })->when($request->has('date_from') && $request->has('date_to'), function ($query) use ($request) {
                 return $query->whereBetween('date', [$request->input('date_from'), $request->input('date_to')]);
-            })->paginate(3);
+            })->orderBy('id', 'desc')->paginate(3);
 
             $locations = DB::query("SELECT * FROM locations ORDER BY name ASC");
 

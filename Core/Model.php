@@ -27,6 +27,18 @@ class Model
         return $this;
     }
 
+    // Fetch By Order
+    public function orderBy($column, $order = "asc")
+    {
+        if ($this->query) {
+            $this->query .= " ORDER BY $column $order";
+        } else {
+            $this->query = "SELECT * FROM $this->table ORDER BY {$column} {$order}";
+        }
+
+        return $this;
+    }
+
     // Fetch the first result
     public function first()
     {
@@ -35,6 +47,7 @@ class Model
         } else {
             $this->query = "SELECT * FROM $this->table LIMIT 1";
         }
+
         $stmt = $this->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
     }
@@ -182,7 +195,7 @@ class Model
     }
 
     // Add raw conditions to the query
-    protected function addCondition($condition)
+    private function addCondition($condition)
     {
         if (strpos($this->query, 'WHERE') === false) {
             $this->query = "SELECT * FROM {$this->table} WHERE {$condition}";
@@ -192,7 +205,7 @@ class Model
     }
 
     // Execute the query with bindings
-    protected function execute()
+    private function execute()
     {
         // dd($this->query);
         $stmt = $this->pdo->prepare($this->query);
