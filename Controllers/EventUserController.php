@@ -15,16 +15,57 @@ class EventUserController extends Controller
             $event = new Event();
 
             $events = $event->when($request->has('title'), function ($query) use ($request) {
-                return $query->whereLike('title', $request->input('title'));
+
+                return $query->whereLike('title', $request->input('title')); // search by title
+
             })->when($request->has('location'), function ($query) use ($request) {
-                return $query->where('location_id', "=", $request->input('location'));
+
+                return $query->where('location_id', "=", $request->input('location')); // search by location
+
             })->when($request->has('date_from') && $request->has('date_to'), function ($query) use ($request) {
-                return $query->whereBetween('date', [$request->input('date_from'), $request->input('date_to')]);
+
+                return $query->whereBetween('date', [$request->input('date_from'), $request->input('date_to')]); // search by date
+
             })->orderBy('id', 'desc')->paginate(3);
 
             $locations = DB::query("SELECT * FROM locations ORDER BY name ASC");
 
             return $this->view('events.user.index', ['events' => $events, 'locations' => $locations]);
+        } catch (\Throwable $th) {
+            die($th->getMessage());
+        }
+    }
+
+    public function show(Request $request)
+    {
+        if (!$request->has('slug')) {
+            return redirect(route('events'));
+        }
+
+        try {
+            $events = new Event();
+            // $event = $events->where('slug', "=", $request->input('slug'))->get();
+            $event = DB::query(
+                "SELECT events.*, 
+                users.name AS organizer_name,
+                users.email AS organizer_email,
+                users.profile_picture AS organizer_profile_picture,
+                locations.name AS location_name
+            FROM 
+                events
+            JOIN
+                users ON events.user_id = users.id
+            JOIN
+                locations ON events.location_id = locations.id
+            WHERE
+                events.slug = :slug
+            LIMIT 1",
+                [
+                    'slug' => $request->input('slug')
+                ]
+            );
+
+            $this->view('events.user.show', ['event' => $event[0]]);
         } catch (\Throwable $th) {
             die($th->getMessage());
         }

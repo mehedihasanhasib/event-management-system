@@ -10,7 +10,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $events = Database::query('SELECT title, description, date, banner FROM events ORDER BY id DESC LIMIT 3');
+        $events = Database::query('SELECT title, slug, description, date, banner FROM events ORDER BY id DESC LIMIT 3');
         return $this->view('home.index', ['events' => $events]);
     }
 }

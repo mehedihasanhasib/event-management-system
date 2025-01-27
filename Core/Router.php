@@ -84,7 +84,6 @@ class Router
 
     public function url($name, $params = [])
     {
-
         $uri = $this->namedRoutes[$name]['uri'];
         return $uri;
     }

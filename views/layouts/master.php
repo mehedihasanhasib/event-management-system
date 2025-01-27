@@ -31,7 +31,7 @@
     </header>
 
     <main>
-        <?= $content ?? "Content" ?>
+        <?= $content ?? "" ?>
     </main>
 
     <!-- <footer class="bg-dark text-white text-center py-3">

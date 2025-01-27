@@ -64,6 +64,11 @@ function isRoute($path)
     return parse_url($_SERVER["REQUEST_URI"])["path"] === $path;
 }
 
+function sanitize_input($input)
+{
+    return htmlspecialchars($input);
+}
+
 function dd($value)
 {
     echo '<pre>';

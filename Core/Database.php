@@ -39,8 +39,24 @@ class Database
     {
         try {
             $pdo = self::getInstance();
+            
             $stmt = $pdo->prepare($sql);
-            $stmt->execute($params);
+
+
+            foreach ($params as $key => $value) {
+                $stmt->bindValue(
+                    is_int($key) ? $key + 1 : ":$key",
+                    $value,
+                    is_bool($value)
+                        ? PDO::PARAM_BOOL
+                        : (is_numeric($value)
+                            ? PDO::PARAM_INT
+                            : PDO::PARAM_STR)
+                );
+            }
+
+
+            $stmt->execute();
 
             // Return the result set for SELECT queries, or true/false for others
             if (preg_match('/^\s*(SELECT|SHOW|DESCRIBE|EXPLAIN)\s/i', $sql)) {

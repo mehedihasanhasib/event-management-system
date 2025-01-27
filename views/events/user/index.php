@@ -102,6 +102,7 @@
         <?php endforeach; ?>
     </div>
 </div>
+
 <!-- Pagination Controls -->
 <div class="d-flex justify-content-center mt-4">
     <?php
@@ -121,10 +122,6 @@
         'queryString' => $queryString
     ])
     ?>
-
-    <!-- <div> -->
-    
-    <!-- </div> -->
 </div>
 
 <?php ob_start() ?>

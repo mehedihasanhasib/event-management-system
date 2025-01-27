@@ -7,6 +7,7 @@ use Controllers\EventUserController;
 
 $router->get('/', [HomeController::class, 'index'])->name('home');
 $router->get('/events', [EventUserController::class, 'index'])->name('events');
+$router->get('/event', [EventUserController::class, 'show'])->name('event.show');
 
 $router->get('/my-events', [EventController::class, 'index'])->name('myevents')->middleware(AuthMiddleware::class);
 $router->get('/event/create', [EventController::class, 'create'])->name('event.create')->middleware(AuthMiddleware::class);

@@ -14,8 +14,6 @@
                     </li>
                 </ul>
             </div>
-
-            <!-- Right-Aligned Links -->
             <ul class="navbar-nav">
                 <?php if (auth()): ?>
                     <div class="dropdown">
@@ -27,7 +25,7 @@
                             aria-expanded="false">
                             <div class="icon-circle">
                                 <img
-                                    src="<?= auth()['profile_picture'] ? asset(auth()['profile_picture']) : asset('images/user-avatar/default-avatar.png') ?>"
+                                    src="<?= auth()['profile_picture'] ? asset(auth()['profile_picture']) : asset(DEFAULT_USER_AVATAR) ?>"
                                     class="rounded-circle me-2"
                                     alt="User Avatar"
                                     style="width: 40px; height: 40px; object-fit: cover;">

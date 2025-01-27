@@ -7,7 +7,7 @@
             <p><strong>Date:</strong> <?= $event['date'] ?></p>
             <div>
                 <a href="#" class="btn btn-primary">Register Now</a>
-                <a href="#" class="btn btn-secondary">Details</a>
+                <a href="<?= route('event.show') . "?slug={$event['slug']}" ?>" class="btn btn-secondary">Details</a>
             </div>
         </div>
     </div>

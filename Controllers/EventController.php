@@ -54,7 +54,7 @@ class EventController extends Controller
             $event = new Event();
             if ($request->hasFile('banner')) {
                 $file = $request->file('banner');
-                $path = "uploads/banners/";
+                $path = DEFAULT_BANNER_UPLOAD_PATH;
                 $image = File::upload($file, $path);
             }
             $slug = str_replace([" ", "_", "," . "."], "-", strtolower($request->input('event_slug')));
@@ -117,7 +117,7 @@ class EventController extends Controller
                 File::delete($old_event['banner']);
 
                 $file = $request->file('banner');
-                $path = "uploads/banners/";
+                $path = DEFAULT_BANNER_UPLOAD_PATH;
                 $image = File::upload($file, $path);
             }
 
