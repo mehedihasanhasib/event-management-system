@@ -41,7 +41,7 @@ class EventController extends Controller
             'event_date' => ['required'],
             'event_time' => ['required'],
             'location' => ['required'],
-            'max_capacity' => ['required'],
+            'max_capacity' => ['required', 'numeric'],
             'banner' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'size:2048'],
         ]);
 

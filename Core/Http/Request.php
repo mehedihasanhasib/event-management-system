@@ -15,7 +15,6 @@ class Request
                 $this->files[$key] = $file;
             }
         }
-        // $this->files = $_FILES;
     }
 
     public function input($key, $default = null)

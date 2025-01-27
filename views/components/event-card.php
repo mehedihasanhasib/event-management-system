@@ -5,9 +5,9 @@
             <h5 class="card-title"><?= strlen($event['title']) > 30 ? substr($event['title'], 0, 30) . " ..." : $event['title'] ?></h5>
             <p class="card-text"><?= strlen($event['description']) > 50 ?  substr($event['description'], 0, 50) . " ..." : $event['description'] ?></p>
             <p><strong>Date:</strong> <?= $event['date'] ?></p>
-            <div>
-                <a href="#" class="btn btn-primary">Register Now</a>
-                <a href="<?= route('event.show') . "?slug={$event['slug']}" ?>" class="btn btn-secondary">Details</a>
+            <div class="d-flex justify-content-end align-items-center">
+                <!-- <a href="#" class="btn btn-primary">Register Now</a> -->
+                <a href="<?= route('event.show') . "?slug={$event['slug']}" ?>" class="btn btn-primary">Details</a>
             </div>
         </div>
     </div>

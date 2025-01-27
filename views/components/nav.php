@@ -4,6 +4,7 @@
             <div class="d-flex align-items-center gap-4">
                 <div>
                     <a class="navbar-brand" href="<?= route('home') ?>">Event Management</a>
+                    
                 </div>
                 <ul class="navbar-nav">
                     <li class="nav-item">

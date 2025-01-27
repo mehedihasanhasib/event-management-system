@@ -1,5 +1,14 @@
 <?php ob_start() ?>
+<!-- Registration Modal -->
+<?php component('event-registration-modal', [
+    'event' => $event,
+    'locations' => $locations,
+]) ?>
+
 <div class="container my-5">
+    <?php
+    $available_seats = $event['capacity'] - $event['total_attendees'];
+    ?>
     <!-- Event Title and Hero Section -->
     <div class="card shadow-lg border-0 mb-4 overflow-hidden">
         <div class="row g-0">
@@ -56,30 +65,27 @@
                                     <div>
                                         <h6 class="fw-bold mb-1">Available Seats</h6>
                                         <p class="mb-0 text-primary fw-bold">
-                                            <?= htmlspecialchars($event['capacity']) ?> / <?= htmlspecialchars($event['capacity']) ?>
+                                            <?= htmlspecialchars($available_seats) ?> / <?= htmlspecialchars($event['capacity']) ?>
                                         </p>
                                     </div>
                                     <i class="bi bi-people-fill fs-3 text-primary"></i>
                                 </div>
-                                <?php /*if ($event['available_seats'] <= 3): ?>
-                                <div class="mt-2">
-                                    <small class="text-danger">
-                                        <i class="bi bi-exclamation-circle-fill"></i>
-                                        Only <?= htmlspecialchars(0) ?> seats left!
-                                    </small>
-                                </div>
-                                <?php endif;*/ ?>
+                                <?php if ($available_seats <= 10): ?>
+                                    <div class="mt-2">
+                                        <small class="text-danger">
+                                            <i class="bi bi-exclamation-circle-fill"></i>
+                                            Only <?= htmlspecialchars($available_seats) ?> seats left!
+                                        </small>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                        <button class="btn btn-primary btn-lg px-4 me-md-2">
+                        <button type="button" class="btn btn-primary btn-lg px-4 me-md-2" data-bs-toggle="modal" data-bs-target="#eventRegistrationModal">
                             <i class="bi bi-ticket-perforated me-2"></i>Register Now
-                        </button>
-                        <button class="btn btn-outline-secondary btn-lg px-4">
-                            <i class="bi bi-share me-2"></i>Share
                         </button>
                     </div>
                 </div>
@@ -103,4 +109,21 @@
 </div>
 <?php $content = ob_get_clean() ?>
 
-<?php layout('master', compact('content')); ?>
+<?php ob_start() ?>
+<script>
+    $(document).ready(function() {
+        const registrationForm = $("#eventRegistrationForm");
+
+        $("#submitButton").on("click", function(event) {
+            event.preventDefault();
+
+            const url = registrationForm.attr('action')
+            const formData = new FormData(registrationForm[0]);
+
+            submit(url, formData);
+        })
+    })
+</script>
+<?php $script = ob_get_clean() ?>
+
+<?php layout('master', compact('content', 'script')); ?>

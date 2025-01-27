@@ -9,6 +9,14 @@ use Core\Http\Request;
 
 class EventUserController extends Controller
 {
+
+    protected $locations;
+
+    public function __construct()
+    {
+        $this->locations = DB::query("SELECT * FROM locations ORDER BY name ASC");
+    }
+
     public function index(Request $request)
     {
         try {
@@ -28,9 +36,7 @@ class EventUserController extends Controller
 
             })->orderBy('id', 'desc')->paginate(3);
 
-            $locations = DB::query("SELECT * FROM locations ORDER BY name ASC");
-
-            return $this->view('events.user.index', ['events' => $events, 'locations' => $locations]);
+            return $this->view('events.user.index', ['events' => $events, 'locations' => $this->locations]);
         } catch (\Throwable $th) {
             die($th->getMessage());
         }
@@ -43,20 +49,21 @@ class EventUserController extends Controller
         }
 
         try {
-            $events = new Event();
-            // $event = $events->where('slug', "=", $request->input('slug'))->get();
             $event = DB::query(
                 "SELECT events.*, 
                 users.name AS organizer_name,
                 users.email AS organizer_email,
                 users.profile_picture AS organizer_profile_picture,
-                locations.name AS location_name
+                locations.name AS location_name,
+                COUNT(attendees.id) AS total_attendees
             FROM 
                 events
             JOIN
                 users ON events.user_id = users.id
             JOIN
                 locations ON events.location_id = locations.id
+            JOIN
+                attendees ON events.id = attendees.event_id
             WHERE
                 events.slug = :slug
             LIMIT 1",
@@ -65,7 +72,7 @@ class EventUserController extends Controller
                 ]
             );
 
-            $this->view('events.user.show', ['event' => $event[0]]);
+            $this->view('events.user.show', ['event' => $event[0], 'locations' => $this->locations]);
         } catch (\Throwable $th) {
             die($th->getMessage());
         }

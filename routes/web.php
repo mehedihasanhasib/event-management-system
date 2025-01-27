@@ -1,5 +1,6 @@
 <?php
 
+use Controllers\AttendeeController;
 use Controllers\HomeController;
 use Middlewares\AuthMiddleware;
 use Controllers\EventController;
@@ -8,6 +9,9 @@ use Controllers\EventUserController;
 $router->get('/', [HomeController::class, 'index'])->name('home');
 $router->get('/events', [EventUserController::class, 'index'])->name('events');
 $router->get('/event', [EventUserController::class, 'show'])->name('event.show');
+
+$router->get('/attendees', [AttendeeController::class, 'index'])->name('attendee.index');
+$router->post('/attendee/store', [AttendeeController::class, 'store'])->name('attendee.store');
 
 $router->get('/my-events', [EventController::class, 'index'])->name('myevents')->middleware(AuthMiddleware::class);
 $router->get('/event/create', [EventController::class, 'create'])->name('event.create')->middleware(AuthMiddleware::class);
