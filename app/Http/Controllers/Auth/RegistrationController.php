@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Core\Auth;
-use Helpers\File;
-use Core\Validator;
+use App\Core\Auth;
+use App\Helpers\File;
+use App\Core\Validator;
 use App\Models\User;
-use Core\Controller;
+use App\Core\Controller;
 use App\Http\Request;
 
 class RegistrationController extends Controller

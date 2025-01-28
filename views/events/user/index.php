@@ -91,8 +91,8 @@
 
             <!-- Submit Button -->
             <div class="col-12 d-flex gap-2 text-end">
-                <button type="submit" class="btn btn-primary btn-lg w-100">Filter</button>
                 <a href="<?= route('events') ?>" class="btn btn-secondary btn-lg w-100" id="resetFilter">Reset</a>
+                <button type="submit" class="btn btn-primary btn-lg w-100">Filter</button>
             </div>
         </div>
     </form>

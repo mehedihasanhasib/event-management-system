@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Core\Auth;
-use Core\Session;
-use Core\Controller;
+use App\Core\Auth;
+use App\Core\Session;
+use App\Core\Controller;
 use App\Http\Request;
 
 class SessionController extends Controller

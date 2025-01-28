@@ -1,9 +1,9 @@
 <?php
 
-namespace Core;
+namespace App\Core;
 
 use PDO;
-use Core\Database;
+use App\Core\Database;
 
 class Model
 {

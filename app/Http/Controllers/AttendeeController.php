@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Core\Validator;
-use Core\Controller;
+use App\Core\Validator;
+use App\Core\Controller;
 use App\Http\Request;
 use App\Models\Attendee;
 

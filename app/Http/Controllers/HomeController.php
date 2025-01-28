@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Core\Controller;
-use Core\Database;
-use Models\Event;
+use App\Core\Controller;
+use App\Core\Database;
 
 class HomeController extends Controller
 {

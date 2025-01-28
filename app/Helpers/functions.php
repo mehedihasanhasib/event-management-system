@@ -1,6 +1,6 @@
 <?php
 
-use Core\Auth;
+use App\Core\Auth;
 
 function layout(string $layout, array $data = [])
 {
@@ -46,7 +46,7 @@ function asset($path)
 
 function auth()
 {
-    if (\Core\Session::get('auth')) {
+    if (\App\Core\Session::get('auth')) {
         return Auth::user();
     } else {
         return false;

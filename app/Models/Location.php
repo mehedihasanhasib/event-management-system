@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-use Core\Model;
+use App\Core\Model;
+
+
 
 class Location extends Model
 {

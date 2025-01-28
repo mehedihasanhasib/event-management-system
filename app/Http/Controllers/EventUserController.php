@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Helpers\DB;
-use Core\Controller;
+use App\Helpers\DB;
+use App\Core\Controller;
 use App\Http\Request;
 use App\Models\Event;
 

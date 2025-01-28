@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Core\Auth;
-use Helpers\DB;
-use Helpers\File;
-use Core\Validator;
-use Core\Controller;
+use App\Core\Auth;
+use App\Helpers\DB;
+use App\Helpers\File;
+use App\Core\Validator;
+use App\Core\Controller;
 use App\Http\Request;
 use App\Models\Event;
 
