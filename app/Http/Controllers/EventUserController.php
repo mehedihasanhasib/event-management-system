@@ -51,7 +51,8 @@ class EventUserController extends Controller
 
         try {
             $event = DB::query(
-                "SELECT events.*, 
+            "SELECT
+                events.*, 
                 users.name AS organizer_name,
                 users.email AS organizer_email,
                 users.profile_picture AS organizer_profile_picture,

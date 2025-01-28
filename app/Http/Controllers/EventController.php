@@ -17,10 +17,27 @@ class EventController extends Controller
     {
         $user_id = auth()['id'];
         $events = new Event();
-        $events = DB::query("SELECT events.*, locations.name AS location_name 
-        FROM events JOIN locations ON events.location_id = locations.id WHERE user_id = :user_id", [
-            'user_id' => $user_id,
-        ]);
+        $events = DB::query(
+            "SELECT
+                events.*,
+                locations.name AS location_name,
+                COUNT(attendees.id) AS total_attendees
+            FROM
+                events
+            JOIN
+                locations ON events.location_id = locations.id
+            LEFT JOIN
+                attendees ON events.id = attendees.event_id
+            WHERE
+                user_id = :user_id
+            GROUP BY
+                events.id, locations.name",
+            [
+                'user_id' => $user_id,
+            ]
+        );
+
+        // return json_response($events);
 
         return $this->view('events.index', ['events' => $events]);
     }

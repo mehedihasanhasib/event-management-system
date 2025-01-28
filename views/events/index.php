@@ -19,7 +19,8 @@
                     <th>Date</th>
                     <th>Location</th>
                     <th>Max Capacity</th>
-                    <th>Actions</th>
+                    <th>Total Attendees</th>
+                    <th class="text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,10 +29,11 @@
                         <tr>
                             <td><?= $index + 1; ?></td>
                             <td><?= htmlspecialchars($event['title']); ?></td>
-                            <td><?= htmlspecialchars(substr($event['description'], 0, 70) . " ..."); ?></td>
+                            <td><?= htmlspecialchars(substr($event['description'], 0, 50) . " ..."); ?></td>
                             <td><?= htmlspecialchars($event['date']); ?></td>
                             <td><?= htmlspecialchars($event['location_name']); ?></td>
-                            <td><?= htmlspecialchars($event['capacity']); ?></td>
+                            <td class="text-center"><?= htmlspecialchars($event['capacity']); ?></td>
+                            <td class="text-center"><?= htmlspecialchars($event['total_attendees']); ?></td>
                             <td>
                                 <a href="<?= route('event.edit') . "?id={$event['id']}" ?>" class="btn btn-sm btn-warning">Edit</a>
                                 <a href="#" class="btn btn-sm btn-danger">Delete</a>
