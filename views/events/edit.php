@@ -100,7 +100,7 @@
             const url = $(this).attr("action")
             const formData = new FormData(this);
             submit(url, formData, function() {
-                window.location.href = "<?= route('myevents') ?>"
+                window.location.href = "<?= route('creator.events') ?>"
             });
         })
     })

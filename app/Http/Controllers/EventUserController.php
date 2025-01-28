@@ -35,7 +35,7 @@ class EventUserController extends Controller
 
                 return $query->whereBetween('date', [$request->input('date_from'), $request->input('date_to')]); // search by date
 
-            })->orderBy('id', 'desc')->paginate(3);
+            })->orderBy('id', 'desc')->paginate(9);
 
             return $this->view('events.user.index', ['events' => $events, 'locations' => $this->locations]);
         } catch (\Throwable $th) {

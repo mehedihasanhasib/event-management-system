@@ -34,7 +34,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <li>
-                                <a class="dropdown-item" href="<?= route('myevents') ?>">My Events</a>
+                                <a class="dropdown-item" href="<?= route('creator.events') ?>">My Events</a>
                             </li>
                             <li>
                                 <form action="<?= route('logout') ?>" method="POST" class="d-inline">
