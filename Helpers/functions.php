@@ -69,6 +69,11 @@ function sanitize_input($input)
     return htmlspecialchars($input);
 }
 
+function isActiveRoute($route)
+{
+    return isRoute($route) ? 'active' : '';
+}
+
 function dd($value)
 {
     echo '<pre>';

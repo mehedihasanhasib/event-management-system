@@ -4,14 +4,14 @@
             <div class="d-flex align-items-center gap-4">
                 <div>
                     <a class="navbar-brand" href="<?= route('home') ?>">Event Management</a>
-                    
+
                 </div>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link <?= isRoute(route('home')) ? 'active' : '' ?>" href="<?= route('home') ?>">Home</a>
+                        <a class="nav-link <?= isActiveRoute(route('home')) ?>" href="<?= route('home') ?>">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= isRoute(route('events')) ? 'active' : '' ?>" href="<?= route('events') ?>">Events</a>
+                        <a class="nav-link <?= isActiveRoute(route('events')) ?>" href="<?= route('events') ?>">Events</a>
                     </li>
                 </ul>
             </div>
@@ -45,10 +45,10 @@
                     </div>
                 <?php else: ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= route('login') ?>">Login</a>
+                        <a class="nav-link <?= isActiveRoute(route('login')) ?>" href="<?= route('login') ?>">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= route('register') ?>">Register</a>
+                        <a class="nav-link <?= isActiveRoute(route('register')) ?>" href="<?= route('register') ?>">Register</a>
                     </li>
                 <?php endif; ?>
             </ul>
