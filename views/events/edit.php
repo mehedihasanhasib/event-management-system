@@ -68,7 +68,7 @@
                             <input type="file" class="form-control" id="banner" name="banner">
                             <?php component('input-error', ['className' => ['bannerError']]) ?>
                             <div class="mt-3 d-flex justify-content-center">
-                                <img id="banner-preview" src="<?= asset($event['banner']) ?>" alt="Profile Picture Preview" style="max-width: 100%;max-height: 50vh;object-fit:cover;" />
+                                <img id="banner-preview" src="<?= asset($event['banner'] ?? DEFAULT_EVENT_BANNER) ?>" alt="Profile Picture Preview" style="max-width: 100%;max-height: 50vh;object-fit:cover;" />
                             </div>
                         </div>
 

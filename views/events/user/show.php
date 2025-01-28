@@ -14,7 +14,7 @@
     <div class="card shadow-lg border-0 mb-4 overflow-hidden">
         <div class="row g-0">
             <div class="col-md-6 position-relative">
-                <img src="<?= htmlspecialchars($event['banner']) ?? DEFAULT_EVENT_BANNER ?>"
+                <img src="<?= asset($event['banner']) ?? DEFAULT_EVENT_BANNER ?>"
                     class="img-fluid" alt="Event Image"
                     style="object-fit: cover; height: 100%; min-height: 400px; width: 100%;">
                 <div class="position-absolute bottom-0 start-0 w-100 bg-gradient-dark p-3 text-white"
@@ -35,7 +35,7 @@
                     <!-- Organizer Info -->
                     <div class="d-flex align-items-center mb-4">
                         <div class="position-relative me-3">
-                            <img src="<?= htmlspecialchars($event['organizer_profile_picture'] ?? DEFAULT_USER_AVATAR) ?>"
+                            <img src="<?= asset($event['organizer_profile_picture'] ?? DEFAULT_USER_AVATAR) ?>"
                                 class="rounded-circle"
                                 alt="Organizer"
                                 style="width: 60px; height: 60px; object-fit: cover;">

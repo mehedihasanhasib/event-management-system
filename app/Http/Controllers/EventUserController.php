@@ -43,34 +43,30 @@ class EventUserController extends Controller
         }
     }
 
-    public function show(Request $request)
+    public function show(Request $request, $slug)
     {
-        if (!$request->has('slug')) {
-            return redirect(route('events'));
-        }
-
         try {
             $event = DB::query(
-            "SELECT
-                events.*, 
-                users.name AS organizer_name,
-                users.email AS organizer_email,
-                users.profile_picture AS organizer_profile_picture,
-                locations.name AS location_name,
-                COUNT(attendees.id) AS total_attendees
-            FROM 
-                events
-            JOIN
-                users ON events.user_id = users.id
-            JOIN
-                locations ON events.location_id = locations.id
-            LEFT JOIN
-                attendees ON events.id = attendees.event_id
-            WHERE
-                events.slug = :slug
-            LIMIT 1",
+                "SELECT
+                    events.*, 
+                    users.name AS organizer_name,
+                    users.email AS organizer_email,
+                    users.profile_picture AS organizer_profile_picture,
+                    locations.name AS location_name,
+                    COUNT(attendees.id) AS total_attendees
+                FROM 
+                    events
+                JOIN
+                    users ON events.user_id = users.id
+                JOIN
+                    locations ON events.location_id = locations.id
+                LEFT JOIN
+                    attendees ON events.id = attendees.event_id
+                WHERE
+                    events.slug = :slug
+                LIMIT 1",
                 [
-                    'slug' => $request->input('slug')
+                    'slug' => $slug
                 ]
             );
 

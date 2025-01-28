@@ -45,6 +45,7 @@ function asset($path)
 {
     $baseUrl = ($_SERVER['HTTPS'] ?? 'off') === 'on' ? "https://{$_SERVER['HTTP_HOST']}" : "http://{$_SERVER['HTTP_HOST']}";
     return $baseUrl . '/' . ltrim($path, '/');
+    // return $_SERVER['SERVER_NAME'] . '/' . ltrim($path, '/');
 }
 
 function auth()

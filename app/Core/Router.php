@@ -62,6 +62,7 @@ class Route
 
     public static function route($uri, $method)
     {
+        // dd($uri);
         foreach (self::$routes as $route) {
             if ($route['uri'] == $uri) {
                 if ($method != $route['method']) {
@@ -71,7 +72,6 @@ class Route
                 if ($route['middleware'] != null) {
                     (new $route['middleware'])->handle();
                 }
-
                 $controller = new $route['controller'][0]();
                 $method = $route['controller'][1];
                 $request = new Request();
@@ -79,9 +79,9 @@ class Route
                 return;
             }
 
-            // handle dynamic routes
-            $routePattern = preg_replace('/\{([a-zA-Z0-9_]+)\}/', '([a-zA-Z0-9_]+)', $route['uri']);
+            $routePattern = preg_replace('/\{([a-zA-Z0-9_-]+)\}/', '([a-zA-Z0-9_-]+)', $route['uri']);
             $routePattern = "#^" . $routePattern . "$#";
+
             if (preg_match($routePattern, $uri, $matches)) {
                 array_shift($matches); // Remove the full match from the array
                 if ($method != $route['method']) {
