@@ -62,7 +62,6 @@ class Route
 
     public static function route($uri, $method)
     {
-        // dd($uri);
         foreach (self::$routes as $route) {
             if ($route['uri'] == $uri) {
                 if ($method != $route['method']) {
@@ -81,7 +80,6 @@ class Route
 
             $routePattern = preg_replace('/\{([a-zA-Z0-9_-]+)\}/', '([a-zA-Z0-9_-]+)', $route['uri']);
             $routePattern = "#^" . $routePattern . "$#";
-
             if (preg_match($routePattern, $uri, $matches)) {
                 array_shift($matches); // Remove the full match from the array
                 if ($method != $route['method']) {
@@ -104,6 +102,7 @@ class Route
         }
         http_response_code(404);
         require_once '../views/404.php';
+        exit;
     }
 
     public static function url($name, $params = [])

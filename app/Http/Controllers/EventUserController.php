@@ -70,7 +70,12 @@ class EventUserController extends Controller
                 ]
             );
 
-            $this->view('events.user.show', ['event' => $event[0], 'locations' => $this->locations]);
+            if($event['id'] == null)
+            {
+                return redirect(route('events'));   
+            }
+
+            $this->view('events.user.show', ['event' => $event, 'locations' => $this->locations]);
         } catch (\Throwable $th) {
             die($th->getMessage());
         }

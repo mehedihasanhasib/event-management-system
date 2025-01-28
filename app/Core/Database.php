@@ -60,6 +60,9 @@ class Database
 
             // Return the result set for SELECT queries, or true/false for others
             if (preg_match('/^\s*(SELECT|SHOW|DESCRIBE|EXPLAIN)\s/i', $sql)) {
+                if(preg_match('/\bLIMIT\s+1\b/i', $sql)){
+                    return $stmt->fetch(PDO::FETCH_ASSOC);
+                }
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             } else {
                 return $stmt->rowCount(); // Number of affected rows for INSERT, UPDATE, DELETE

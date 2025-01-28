@@ -35,7 +35,7 @@
                             <td class="text-center"><?= htmlspecialchars($event['capacity']); ?></td>
                             <td class="text-center"><?= htmlspecialchars($event['total_attendees']); ?></td>
                             <td>
-                                <a href="<?= route('event.edit') . "?id={$event['id']}" ?>" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="<?= route('event.edit', ['id' => $event['id']]) ?>" class="btn btn-sm btn-warning">Edit</a>
                                 <a href="#" class="btn btn-sm btn-danger">Delete</a>
                                 <a href="<?= route('attendee.index', ['id' => $event['id']]) ?>" class="btn btn-sm btn-primary">Attendees</a>
                             </td>

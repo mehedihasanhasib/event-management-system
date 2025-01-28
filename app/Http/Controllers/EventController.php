@@ -16,7 +16,6 @@ class EventController extends Controller
     public function index()
     {
         $user_id = auth()['id'];
-        $events = new Event();
         $events = DB::query(
             "SELECT
                 events.*,
@@ -91,13 +90,9 @@ class EventController extends Controller
         }
     }
 
-    public function edit(Request $request)
+    public function edit(Request $request, $id)
     {
-        if (!$request->has('id') || $request->input('id') == null) {
-            return redirect(route('myevents'));
-        }
-
-        $event_id = $request->input('id');
+        $event_id = $id;
         $user_id = auth()['id'];
         $events = DB::query('SELECT events.*, locations.name FROM events JOIN locations ON events.location_id = locations.id WHERE events.id = :event_id AND user_id = :user_id', [
             'event_id' => $event_id,
