@@ -13,7 +13,6 @@ Route::get('/events', [EventUserController::class, 'index'])->name('events');
 Route::get('/event', [EventUserController::class, 'show'])->name('event.show');
 
 Route::get('/event/attendees/{id}', [AttendeeController::class, 'index'])->name('attendee.index');
-
 Route::post('/attendee/store', [AttendeeController::class, 'store'])->name('attendee.store');
 
 Route::get('/my-events', [EventController::class, 'index'])->name('myevents')->middleware(AuthMiddleware::class);

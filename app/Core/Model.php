@@ -158,7 +158,7 @@ class Model
         $page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT) ?: 1;
         $offset = ($page - 1) * $limit;
 
-        $countQuery = "SELECT COUNT(*) AS total FROM {$this->table}";
+        $countQuery = "SELECT COUNT(id) AS total FROM {$this->table}";
         $baseQuery = $this->query;
 
         if (strpos($baseQuery, 'WHERE') !== false) {
