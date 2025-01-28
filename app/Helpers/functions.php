@@ -1,6 +1,7 @@
 <?php
 
 use App\Core\Auth;
+use App\Core\Route;
 
 function layout(string $layout, array $data = [])
 {
@@ -18,8 +19,10 @@ function component(string $component, array $data = [])
 
 function route($name, $params = [])
 {
-    global $router;
-    return $router->url($name, $params);
+    // global $router;
+    // return $router->url($name, $params);
+
+    return Route::url($name, $params);
 }
 
 function redirect($url = "/")

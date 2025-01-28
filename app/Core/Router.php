@@ -5,47 +5,47 @@ namespace App\Core;
 use App\Http\Request;
 
 
-class Router
+class Route
 {
-    private $routes = [];
-    public $namedRoutes = [];
+    protected static $routes = [];
+    protected static $namedRoutes = [];
 
-    public function get($uri, $controller)
+    public static function get($uri, $controller)
     {
-        return $this->addRoute('GET', $uri, $controller);
+        return self::addRoute('GET', $uri, $controller);
     }
 
-    public function post($uri, $controller)
+    public static function post($uri, $controller)
     {
-        return $this->addRoute('POST', $uri, $controller);
+        return self::addRoute('POST', $uri, $controller);
     }
 
-    public function put($uri, $controller)
+    public static function put($uri, $controller)
     {
-        return $this->addRoute('PUT', $uri, $controller);
+        return self::addRoute('PUT', $uri, $controller);
     }
 
-    public function delete($uri, $controller)
+    public static function delete($uri, $controller)
     {
-        return $this->addRoute('DELETE', $uri, $controller);
+        return self::addRoute('DELETE', $uri, $controller);
     }
 
-    private function addRoute($method, $uri, $controller)
+    private static function addRoute($method, $uri, $controller)
     {
-        $this->routes[] = [
+        self::$routes[] = [
             'method' => $method,
             'uri' => $uri,
             'controller' => $controller,
             'middleware' => null
         ];
-        return $this;
+        return new self();
     }
 
     public function name($name)
     {
-        $lastRoute = end($this->routes);
+        $lastRoute = end(self::$routes);
         if ($lastRoute) {
-            $this->namedRoutes[$name] = [
+            self::$namedRoutes[$name] = [
                 'uri' => $lastRoute['uri'],
                 'method' => $lastRoute['method'],
                 'controller' => $lastRoute['controller'],
@@ -57,12 +57,12 @@ class Router
 
     public function middleware($key)
     {
-        return $this->routes[array_key_last($this->routes)]['middleware'] = $key;
+        return self::$routes[array_key_last(self::$routes)]['middleware'] = $key;
     }
 
-    public function route($uri, $method)
+    public static function route($uri, $method)
     {
-        foreach ($this->routes as $route) {
+        foreach (self::$routes as $route) {
             if ($route['uri'] == $uri) {
                 if ($method != $route['method']) {
                     http_response_code(405);
@@ -83,9 +83,9 @@ class Router
         require_once '../views/404.php';
     }
 
-    public function url($name, $params = [])
+    public static function url($name, $params = [])
     {
-        $uri = $this->namedRoutes[$name]['uri'];
+        $uri = self::$namedRoutes[$name]['uri'];
         return $uri;
     }
 }
