@@ -62,7 +62,7 @@ class EventUserController extends Controller
                 users ON events.user_id = users.id
             JOIN
                 locations ON events.location_id = locations.id
-            JOIN
+            LEFT JOIN
                 attendees ON events.id = attendees.event_id
             WHERE
                 events.slug = :slug

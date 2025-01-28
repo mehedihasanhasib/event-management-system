@@ -7,7 +7,8 @@
 
 <div class="container my-5">
     <?php
-    $available_seats = $event['capacity'] - $event['total_attendees'];
+    $total_seats = $event['capacity'];
+    $available_seats = $total_seats - $event['total_attendees'];
     ?>
     <!-- Event Title and Hero Section -->
     <div class="card shadow-lg border-0 mb-4 overflow-hidden">
@@ -84,7 +85,9 @@
 
                     <!-- Action Buttons -->
                     <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                        <button type="button" class="btn btn-primary btn-lg px-4 me-md-2" data-bs-toggle="modal" data-bs-target="#eventRegistrationModal">
+                        <button type="button" class="btn btn-primary btn-lg px-4 me-md-2"
+                            data-bs-toggle="modal" data-bs-target="#eventRegistrationModal"
+                            <?= $available_seats == $total_seats ? "" : "disabled"  ?>>
                             <i class="bi bi-ticket-perforated me-2"></i>Register Now
                         </button>
                     </div>
