@@ -4,14 +4,49 @@ namespace App\Http\Controllers;
 
 use App\Core\Validator;
 use App\Core\Controller;
+use App\Helpers\DB;
 use App\Http\Request;
 use App\Models\Attendee;
 
 class AttendeeController extends Controller
 {
-    public function index()
+    public function index(Request $request, $id)
     {
-        return $this->view('attendees.index');
+        $attendees = DB::query(
+            "SELECT 
+                attendees.*,
+                locations.name AS location_name
+            FROM
+                attendees 
+            JOIN
+                events ON events.id = attendees.event_id 
+            JOIN
+                locations ON attendees.location_id = locations.id
+            WHERE 
+                attendees.event_id = :event_id AND events.user_id = :user_id",
+            [
+                'event_id' => $id,
+                'user_id' => auth()['id']
+            ]
+        );
+
+        $event = DB::query(
+            "SELECT 
+                events.title,
+                events.date,
+                locations.name AS event_location
+            FROM
+                events
+            JOIN
+                locations ON events.location_id = locations.id
+            WHERE
+                events.id = :event_id",
+            [
+                'event_id' => $id,
+            ]
+        );
+
+        return $this->view('attendees.index', ['attendees' => $attendees, 'event' => $event[0]]);
     }
 
     public function store(Request $request)

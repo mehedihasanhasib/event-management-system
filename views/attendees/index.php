@@ -10,9 +10,9 @@
 
     <!-- Event Details -->
     <div class="mb-4">
-        <h3>Event: Tech Conference 2025</h3>
-        <p class="m-0"><strong>Date:</strong> February 25, 2025</p>
-        <p><strong>Location:</strong> New York City, NY</p>
+        <h3>Event: <?= htmlspecialchars($event['title']) ?></h3>
+        <p class="m-0"><strong>Date:</strong> <?= htmlspecialchars(date("F j, Y", strtotime($event['date']))) ?></p>
+        <p><strong>Location:</strong> <?= htmlspecialchars($event['event_location']) ?></p>
     </div>
 
     <!-- Filter Section -->
@@ -42,59 +42,28 @@
                     <th>Full Name</th>
                     <th>Email</th>
                     <th>Phone</th>
-                    <th>Registration Date</th>
+                    <th>Attendee Location</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <?php
-                // Example attendee data (Replace this with database query results)
-                $attendees = [
-                    [
-                        "id" => 1,
-                        "name" => "John Doe",
-                        "email" => "john.doe@example.com",
-                        "phone" => "123-456-7890",
-                        "registration_date" => "2025-01-15",
-                    ],
-                    [
-                        "id" => 2,
-                        "name" => "Jane Smith",
-                        "email" => "jane.smith@example.com",
-                        "phone" => "987-654-3210",
-                        "registration_date" => "2025-01-16",
-                    ],
-                    [
-                        "id" => 3,
-                        "name" => "Mark Taylor",
-                        "email" => "mark.taylor@example.com",
-                        "phone" => "555-678-1234",
-                        "registration_date" => "2025-01-17",
-                    ],
-                ];
-
-                if (!empty($attendees)) {
-                    foreach ($attendees as $index => $attendee) {
-                ?>
-                        <tr>
-                            <td><?= $index + 1; ?></td>
-                            <td><?= htmlspecialchars($attendee['name']); ?></td>
-                            <td><?= htmlspecialchars($attendee['email']); ?></td>
-                            <td><?= htmlspecialchars($attendee['phone']); ?></td>
-                            <td><?= htmlspecialchars($attendee['registration_date']); ?></td>
-                            <td>
-                                <a href="attendee_edit.php?id=<?= $attendee['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
-                                <a href="attendee_delete.php?id=<?= $attendee['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to remove this attendee?');">Remove</a>
-                            </td>
-                        </tr>
-                    <?php
-                    }
-                } else {
-                    ?>
+                <?php foreach ($attendees as $index => $attendee): ?>
                     <tr>
-                        <td colspan="6" class="text-center">No attendees found</td>
+                        <td><?= $index + 1; ?></td>
+                        <td><?= htmlspecialchars($attendee['name']); ?></td>
+                        <td><?= htmlspecialchars($attendee['email']); ?></td>
+                        <td><?= htmlspecialchars($attendee['phone_number']); ?></td>
+                        <td><?= htmlspecialchars($attendee['location_name']); ?></td>
+                        <td>
+                            <a href="attendee_edit.php?id=<?= $attendee['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="attendee_delete.php?id=<?= $attendee['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to remove this attendee?');">Remove</a>
+                        </td>
                     </tr>
-                <?php } ?>
+                    <!-- <tr>
+                    <td colspan="6" class="text-center">No attendees found</td>
+                </tr> -->
+                <?php endforeach; ?>
+
             </tbody>
         </table>
     </div>

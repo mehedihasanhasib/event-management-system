@@ -34,8 +34,8 @@
                             <td><?= htmlspecialchars($event['capacity']); ?></td>
                             <td>
                                 <a href="<?= route('event.edit') . "?id={$event['id']}" ?>" class="btn btn-sm btn-warning">Edit</a>
-                                <a href="event_delete.php?id=<?= $event['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this event?');">Delete</a>
-                                <a href="<?= route('attendee.index') ?>" class="btn btn-sm btn-primary">Attendees</a>
+                                <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                                <a href="<?= route('attendee.index', ['id' => $event['id']]) ?>" class="btn btn-sm btn-primary">Attendees</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

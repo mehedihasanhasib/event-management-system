@@ -7,7 +7,7 @@ use App\Http\Request;
 
 class Route
 {
-    protected static $routes = [];
+    public static $routes = [];
     protected static $namedRoutes = [];
 
     public static function get($uri, $controller)
@@ -78,6 +78,29 @@ class Route
                 $controller->$method($request);
                 return;
             }
+
+            // handle dynamic routes
+            $routePattern = preg_replace('/\{([a-zA-Z0-9_]+)\}/', '([a-zA-Z0-9_]+)', $route['uri']);
+            $routePattern = "#^" . $routePattern . "$#";
+            if (preg_match($routePattern, $uri, $matches)) {
+                array_shift($matches); // Remove the full match from the array
+                if ($method != $route['method']) {
+                    http_response_code(405);
+                    die("$method method is not supported on this route\n");
+                }
+
+                if ($route['middleware'] != null) {
+                    (new $route['middleware'])->handle();
+                }
+
+                $controller = new $route['controller'][0]();
+                $action = $route['controller'][1];
+                $request = new Request();
+
+                // Pass dynamic parameters to the controller method
+                $controller->$action($request, ...$matches);
+                return;
+            }
         }
         http_response_code(404);
         require_once '../views/404.php';
@@ -85,7 +108,15 @@ class Route
 
     public static function url($name, $params = [])
     {
+        if (!isset(self::$namedRoutes[$name])) {
+            throw new \Exception("Route with name {$name} not found.");
+        }
         $uri = self::$namedRoutes[$name]['uri'];
+
+        foreach ($params as $key => $value) {
+            $uri = str_replace("{" . $key . "}", $value, $uri);
+        }
+
         return $uri;
     }
 }
