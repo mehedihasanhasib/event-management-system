@@ -1,11 +1,11 @@
 <?php
 
-namespace Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
 use Core\Auth;
-use Core\Controller;
-use Core\Http\Request;
 use Core\Session;
+use Core\Controller;
+use App\Http\Request;
 
 class SessionController extends Controller
 {

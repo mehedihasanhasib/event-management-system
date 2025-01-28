@@ -85,11 +85,17 @@
 
                     <!-- Action Buttons -->
                     <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                        <button type="button" class="btn btn-primary btn-lg px-4 me-md-2"
-                            data-bs-toggle="modal" data-bs-target="#eventRegistrationModal"
-                            <?= $available_seats == $total_seats ? "" : "disabled"  ?>>
-                            <i class="bi bi-ticket-perforated me-2"></i>Register Now
-                        </button>
+                        <?php if ($available_seats === 0):  ?>
+                            <button class="btn btn-secondary" disabled>
+                                <i class="bi bi-x-circle-fill"></i>
+                                Sold Out
+                            </button>
+                        <?php else: ?>
+                            <button type="button" class="btn btn-primary btn-lg px-4 me-md-2"
+                                data-bs-toggle="modal" data-bs-target="#eventRegistrationModal">
+                                <i class="bi bi-ticket-perforated me-2"></i>Register Now
+                            </button>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

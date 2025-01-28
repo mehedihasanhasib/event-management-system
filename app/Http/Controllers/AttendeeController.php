@@ -1,11 +1,11 @@
 <?php
 
-namespace Controllers;
+namespace App\Http\Controllers;
 
 use Core\Validator;
 use Core\Controller;
-use Models\Attendee;
-use Core\Http\Request;
+use App\Http\Request;
+use App\Models\Attendee;
 
 class AttendeeController extends Controller
 {

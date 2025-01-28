@@ -1,16 +1,15 @@
 <?php
 
-namespace Controllers;
+namespace App\Http\Controllers;
 
 use Core\Auth;
+use Helpers\DB;
 use Helpers\File;
-use Models\Event;
-use Core\Database;
 use Core\Validator;
 use Core\Controller;
-use Core\Http\Request;
-use Helpers\DB;
-use Models\Location;
+use App\Http\Request;
+use App\Models\Event;
+
 
 class EventController extends Controller
 {

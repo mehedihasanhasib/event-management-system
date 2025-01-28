@@ -1,10 +1,10 @@
 <?php
 
-use Controllers\AttendeeController;
-use Controllers\HomeController;
-use Middlewares\AuthMiddleware;
-use Controllers\EventController;
-use Controllers\EventUserController;
+use App\Http\Controllers\HomeController;
+use App\Http\Middlewares\AuthMiddleware;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\AttendeeController;
+use App\Http\Controllers\EventUserController;
 
 $router->get('/', [HomeController::class, 'index'])->name('home');
 $router->get('/events', [EventUserController::class, 'index'])->name('events');

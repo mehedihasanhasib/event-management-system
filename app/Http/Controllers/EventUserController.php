@@ -1,11 +1,12 @@
 <?php
 
-namespace Controllers;
+namespace App\Http\Controllers;
 
 use Helpers\DB;
-use Models\Event;
 use Core\Controller;
-use Core\Http\Request;
+use App\Http\Request;
+use App\Models\Event;
+
 
 class EventUserController extends Controller
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
 use Core\Auth;
-use Models\User;
-use Core\Validator;
-use Core\Controller;
-use Core\Http\Request;
 use Helpers\File;
+use Core\Validator;
+use App\Models\User;
+use Core\Controller;
+use App\Http\Request;
 
 class RegistrationController extends Controller
 {
