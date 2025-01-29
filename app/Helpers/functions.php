@@ -25,8 +25,9 @@ function route($name, $params = [])
     return Route::url($name, $params);
 }
 
-function redirect($url = "/")
+function redirect($url = "/", $status_code = 200)
 {
+    http_response_code($status_code);
     header("Location: $url");
     exit;
 }

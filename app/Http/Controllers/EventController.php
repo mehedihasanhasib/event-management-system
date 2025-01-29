@@ -36,8 +36,6 @@ class EventController extends Controller
             ]
         );
 
-        // return json_response($events);
-
         return $this->view('events.index', ['events' => $events]);
     }
 
@@ -94,12 +92,31 @@ class EventController extends Controller
     {
         $event_id = $id;
         $user_id = auth()['id'];
-        $events = DB::query('SELECT events.*, locations.name FROM events JOIN locations ON events.location_id = locations.id WHERE events.id = :event_id AND user_id = :user_id', [
-            'event_id' => $event_id,
-            'user_id' => $user_id
-        ]);
+        $events = DB::query(
+            'SELECT
+                events.*,
+                locations.name
+            FROM
+                events
+            JOIN
+                locations ON events.location_id = locations.id
+            WHERE
+                events.id = :event_id AND user_id = :user_id
+            LIMIT 1',
+            [
+                'event_id' => $event_id,
+                'user_id' => $user_id
+            ]
+        );
+
+        if (!$events) {
+            http_response_code(403);
+            require_once "../views/403.php";
+            exit;
+        }
+
         $locations = DB::query("SELECT * FROM locations ORDER BY name ASC");
-        return $this->view('events.edit', ['event' => $events[0], 'locations' => $locations]);
+        return $this->view('events.edit', ['event' => $events, 'locations' => $locations]);
     }
 
     public function update(Request $request)
@@ -124,6 +141,12 @@ class EventController extends Controller
             $event = new Event();
             $old_event = $event->find($request->input('id'));
 
+            // dd($old_event);
+
+            if ($old_event['user_id'] !== auth()['id']) {
+                return json_response(['errors' => 'You do not have permission to edit this event'], 403);
+            }
+
             if ($request->hasFile('banner')) {
                 File::delete($old_event['banner']);
 
@@ -133,21 +156,20 @@ class EventController extends Controller
             }
 
 
-            if (Auth::authorize($old_event['user_id'])) {
-                $slug = str_replace([" ", "_", "," . "."], "-", strtolower($request->input('event_slug')));
-                $event->update($old_event['id'], [
-                    'title' => $request->input('event_title'),
-                    'slug' => $slug,
-                    'description' => $request->input('event_description'),
-                    'banner' => $image ?? $old_event['banner'],
-                    'date' => $request->input('event_date'),
-                    'time' => $request->input('event_time'),
-                    'location_id' => $request->input('location'),
-                    'capacity' => $request->input('max_capacity'),
-                ]);
-            }
+            $slug = str_replace([" ", "_", "," . "."], "-", strtolower($request->input('event_slug')));
+            $event->update($old_event['id'], [
+                'title' => $request->input('event_title'),
+                'slug' => $slug,
+                'description' => $request->input('event_description'),
+                'banner' => $image ?? $old_event['banner'],
+                'date' => $request->input('event_date'),
+                'time' => $request->input('event_time'),
+                'location_id' => $request->input('location'),
+                'capacity' => $request->input('max_capacity'),
+            ]);
 
-            return json_response(['status' => true, 'message' => 'Event updated successfully'], 200); //code...
+
+            return json_response(['status' => true, 'message' => 'Event updated successfully'], 200);
         } catch (\Throwable $th) {
             return json_response(['status' => false, 'errors' => 'Failed to update event'], 500);
         }

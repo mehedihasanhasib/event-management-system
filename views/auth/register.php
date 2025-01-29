@@ -38,7 +38,7 @@ ob_start()
 
                         <div class="mb-3">
                             <label for="profile_picture" class="form-label">Choose Profile Picture</label>
-                            <input type="file" , name="profile_picture" class="form-control" id="profile_picture" />
+                            <input type="file" name="profile_picture" class="form-control" id="profile_picture" />
                             <?php component('input-error', ['className' => ["profile_pictureError"]]) ?>
                             <div class="mt-3">
                                 <img id="profile-picture-preview" src="<?= asset('/images/user-avatar/default-avatar.png') ?>" alt="Profile Picture Preview" style="width: 100px; height: 100px; border-radius: 50%; object-fit:cover;" />
@@ -63,6 +63,12 @@ ob_start()
 <script>
     $(document).ready(function() {
         const registrationForm = $("#registration-from")
+        const profileImageInput = $("#profile_picture")
+
+        profileImageInput.on("change", function(event){
+            preview(event, "profile-picture-preview");
+        })
+
         registrationForm.on("submit", function(event) {
             event.preventDefault()
             const url = $(this).attr("action")

@@ -49,7 +49,7 @@ class Model
         }
 
         $stmt = $this->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: throw new \Exception($stmt->errorInfo()[2]);
     }
 
     // Fetch all results

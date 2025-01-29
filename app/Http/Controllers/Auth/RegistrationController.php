@@ -23,7 +23,7 @@ class RegistrationController extends Controller
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'min:8'],
             'confirm_password' => ['required', 'min:8', 'confirm:password'],
-            'profile_picture' => ['image', 'size:2048', 'mimes:jpg,png']
+            'profile_picture' => ['image', 'size:2048', 'mimes:jpg,png,jpeg,webp']
         ]);
 
         if ($validator->fails()) {
