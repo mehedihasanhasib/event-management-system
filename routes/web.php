@@ -31,6 +31,7 @@ Route::get('/dashboard/event/create', [EventController::class, 'create'])->name(
 Route::post('/dashboard/event/store', [EventController::class, 'store'])->name('event.store')->middleware(AuthMiddleware::class); // Store new event
 Route::get('/dashboard/event/edit/{id}', [EventController::class, 'edit'])->name('event.edit')->middleware(AuthMiddleware::class); // Edit a specific event
 Route::put('/dashboard/event/update', [EventController::class, 'update'])->name('event.update')->middleware(AuthMiddleware::class); // Update an event
+Route::delete('/event/delete/{id}', [EventController::class, 'destroy'])->name('event.delete')->middleware(AuthMiddleware::class); // Delete an event
 
 // Attendee Routes
 Route::get('/event/{id}/attendees', [AttendeeController::class, 'index'])->name('attendee.index'); // Attendees list for a specific event

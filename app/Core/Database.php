@@ -42,7 +42,6 @@ class Database
             
             $stmt = $pdo->prepare($sql);
 
-
             foreach ($params as $key => $value) {
                 $stmt->bindValue(
                     is_int($key) ? $key + 1 : ":$key",

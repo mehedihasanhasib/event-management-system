@@ -7,6 +7,7 @@ use App\Helpers\DB;
 use App\Helpers\File;
 use App\Core\Validator;
 use App\Core\Controller;
+use App\Core\Session;
 use App\Http\Request;
 use App\Models\Event;
 
@@ -172,6 +173,29 @@ class EventController extends Controller
             return json_response(['status' => true, 'message' => 'Event updated successfully'], 200);
         } catch (\Throwable $th) {
             return json_response(['status' => false, 'errors' => 'Failed to update event'], 500);
+        }
+    }
+
+    public function destroy(Request $request, $id)
+    {
+        try {
+            $deleted_event = DB::query("DELETE FROM events WHERE id = :id AND user_id = :user_id", [
+                'id' => $id,
+                'user_id' => auth()['id']
+            ]);
+            if (!$deleted_event) {
+                Session::flash('status', false);
+                Session::flash('message', 'Event delete failed, Try again!');
+                return redirect(route('creator.events'));
+            }
+            Session::flash('status', true);
+            Session::flash('message', 'Event deleted successfully');
+            return redirect(route('creator.events'));
+        } catch (\Throwable $th) {
+            Session::flash('status', false);
+            Session::flash('message', 'Event delete failed, Try again!');
+            // Session::flash('message', $th->getMessage());
+            return redirect(route('creator.events'));
         }
     }
 }
