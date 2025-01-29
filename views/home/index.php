@@ -8,7 +8,7 @@
     }
 
     .hero h1 {
-        font-size: 3rem;
+        font-size: clamp(2rem, 2.5vw, 3rem) !important;
         font-weight: bold;
     }
 
