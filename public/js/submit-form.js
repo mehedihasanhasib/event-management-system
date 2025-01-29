@@ -41,14 +41,15 @@ function submit(
       const errorResponse = xhr.responseJSON?.errors;
 
       console.log(errorResponse);
-
       switch (statusCode) {
         case 500:
           notification({ icon: "error", text: errorResponse });
           break;
         case 401:
-          const element = document.querySelector(`.validationError`);
-          element.innerText = errorResponse;
+          const element = document.querySelector(".validationErrors");
+          if (element) {
+            element.innerText = errorResponse;
+          }
           notification({ icon: "error", text: errorResponse });
           break;
         case 403:

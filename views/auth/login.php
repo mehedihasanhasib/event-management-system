@@ -9,7 +9,7 @@
                 </div>
                 <div class="card-body">
                     <div class="text-center">
-                        <?php component('input-error') ?>
+                        <?= component('input-error') ?>
                     </div>
                     <form id="login-from" action="<?= route('login.store') ?>" method="POST">
                         <div class="mb-3">
