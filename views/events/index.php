@@ -34,13 +34,10 @@
                             <td><?= htmlspecialchars($event['location_name']); ?></td>
                             <td class="text-center"><?= htmlspecialchars($event['capacity']); ?></td>
                             <td class="text-center"><?= htmlspecialchars($event['total_attendees']); ?></td>
-                            <td class="d-flex gap-1">
+                            <td>
                                 <a href="<?= route('attendee.index', ['id' => $event['id']]) ?>" class="btn btn-sm btn-primary">Attendees</a>
                                 <a href="<?= route('event.edit', ['id' => $event['id']]) ?>" class="btn btn-sm btn-warning">Edit</a>
-                                <form id="event-delete-form" action="<?= route('event.delete', ['id' => $event['id']]) ?>" method="POST">
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                </form>
+                                <a data-action="<?= route('event.delete', ['id' => $event['id']]) ?>" class="btn btn-sm btn-danger delete-button">Delete</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -54,11 +51,15 @@
     </div>
 </div>
 
+<form id="event-delete-form" method="POST">
+    <input type="hidden" name="_method" value="DELETE">
+</form>
+
 <?php ob_start() ?>
 <script>
     $(document).ready(function(event) {
         // Delete event
-        $('#event-delete-form').on('submit', function(event) {
+        $('.delete-button').on('click', function(event) {
             event.preventDefault();
             Swal.fire({
                 title: 'Are you sure?',
@@ -69,8 +70,11 @@
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, delete it!',
             }).then((result) => {
+                const url = $(this).data('action');
+                const deleteForm = $("#event-delete-form");
+                deleteForm.attr('action', url);
                 if (result.isConfirmed) {
-                    this.submit();
+                    deleteForm.submit();
                 }
             })
         })
