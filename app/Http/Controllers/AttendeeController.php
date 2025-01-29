@@ -7,6 +7,7 @@ use App\Core\Controller;
 use App\Helpers\DB;
 use App\Http\Request;
 use App\Models\Attendee;
+use App\Models\Event;
 
 class AttendeeController extends Controller
 {
@@ -65,6 +66,14 @@ class AttendeeController extends Controller
 
         try {
             $attendee = new Attendee();
+            $events = new Event();
+
+            $total_attendees = $attendee->where('event_id', "=", 17)->count();
+            $total_capacity = $events->where('id', "=", $request->input('event_id'))->get(['capacity']);
+            
+            if ($total_attendees >= $total_capacity) {
+                return json_response(['status' => false, 'errors' => "Event is full"]);
+            }
 
             $attendee->create([
                 'event_id' => $request->input('event_id'),
@@ -74,10 +83,10 @@ class AttendeeController extends Controller
                 'location_id' => $request->input('location'),
             ]);
 
-            return json_response(['status' => true, 'message' => 'Attendee created successfully'], 201);
+            return json_response(['status' => true, 'message' => 'Registration successful'], 201);
         } catch (\Throwable $th) {
             // return json_response(['status' => false, 'errors' => $th->getMessage()], 500);
-            return json_response(['status' => false, 'errors' => "An error occurred while creating attendee, Try Again!"], 500);
+            return json_response(['status' => false, 'errors' => "Registration Failed, Try Again!"], 500);
         }
     }
 }

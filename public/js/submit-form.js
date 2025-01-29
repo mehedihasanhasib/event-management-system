@@ -31,14 +31,11 @@ function submit(
       } else {
         Swal.fire({
           icon: "error",
-          title: response.message,
+          title: response.errors,
         });
       }
     },
     error: function (xhr) {
-      console.log(xhr);
-
-      // return false;
       loader.classList.add("d-none");
       const statusCode = xhr.status;
       const errorResponse = xhr.responseJSON?.errors;

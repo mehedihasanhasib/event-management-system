@@ -53,13 +53,34 @@ class Model
     }
 
     // Fetch all results
-    public function get()
+    public function get(array $columns = [])
     {
         if (!$this->query) {
             $this->query = "SELECT * FROM $this->table";
         }
+
+        if (!empty($columns)) {
+            $this->query = str_replace("*", implode(",", $columns), $this->query);
+        }
+
         $stmt = $this->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+        return count($results) > 1 ? $results : $results[0];
+    }
+
+    // Count all the rows
+    public function count()
+    {
+        if ($this->query) {
+            $stmt = $this->execute();
+            return $stmt->rowCount();
+        } else {
+            $this->query = "SELECT COUNT(id) AS total FROM $this->table";
+            $stmt = $this->pdo->prepare($this->query);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        }
     }
 
     // Fetch all records from the table
@@ -227,7 +248,7 @@ class Model
         return $stmt;
     }
 
-    protected function toSQL()
+    public function toSQL()
     {
         return $this->query;
     }
