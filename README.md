@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a simple web-based Event Management System built using pure PHP with a custom MVC architecture. It provides essential event management functionalities along with a structured, maintainable, scalable codebase featuring a dynamic routing engine, models, custom validation class and many more.
+This is a simple web-based Event Management System built using pure PHP with **<mark>MVC architecture</mark>**. It provides essential event management functionalities along with a structured, maintainable, scalable codebase featuring a dynamic routing engine, models, custom validation class and many more.
 
 ## Features
 
@@ -46,10 +46,12 @@ This is a simple web-based Event Management System built using pure PHP with a c
 ### Steps
 
 1. Clone this repository:
+   
    ```bash
    git clone https://github.com/mehedihasanhasib/event-management-system.git
    ```
 2. Configure the `config/database.php` file as your database:
+   
    ```bash
     'host' => 'localhost',
     'port' => 3306,
@@ -59,6 +61,7 @@ This is a simple web-based Event Management System built using pure PHP with a c
    ```
 3. Create a database with the same name provided in the `config/database.php` file and import the provided database schema (`database.sql`) into MySQL.
 4. Open a terminal in the project root folder and start a local server by running the following command:
+   
    ```bash
    php -S localhost:8000 -t public
    ```
