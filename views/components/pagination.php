@@ -12,7 +12,7 @@
 
     <!-- Page Links -->
     <?php if ($totalPages > 5): ?>
-        <?php for ($i = 1 + ($currentPage - 2); $i < 4 + ($currentPage - 2); $i++): ?>
+        <?php for ($i = 1 + ($currentPage - 2); $i < 5 + ($currentPage - 2); $i++): ?>
             <?php if ($i != 0): ?>
                 <li class="page-item">
                     <a

@@ -87,7 +87,7 @@
                     <div class="d-grid gap-2 d-md-flex justify-content-md-start">
                         <?php if ($available_seats === 0):  ?>
                             <button class="btn btn-secondary" disabled>
-                                Sold Out
+                                All Seats Booked
                             </button>
                         <?php else: ?>
                             <button type="button" class="btn btn-primary btn-lg"
