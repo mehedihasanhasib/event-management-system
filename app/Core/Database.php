@@ -12,7 +12,7 @@ class Database
 
     private function __construct()
     {
-        $config = include(BASE_PATH . '/config/config.php'); // Load the configuration file
+        $config = include(BASE_PATH . '/config/database.php'); // Load the configuration file
         $dbConfig = $config['db'];
 
         try {
@@ -39,7 +39,7 @@ class Database
     {
         try {
             $pdo = self::getInstance();
-            
+
             $stmt = $pdo->prepare($sql);
 
             foreach ($params as $key => $value) {
@@ -59,7 +59,7 @@ class Database
 
             // Return the result set for SELECT queries, or true/false for others
             if (preg_match('/^\s*(SELECT|SHOW|DESCRIBE|EXPLAIN)\s/i', $sql)) {
-                if(preg_match('/\bLIMIT\s+1\b/i', $sql)){
+                if (preg_match('/\bLIMIT\s+1\b/i', $sql)) {
                     return $stmt->fetch(PDO::FETCH_ASSOC);
                 }
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
