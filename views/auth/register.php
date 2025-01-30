@@ -41,7 +41,7 @@ ob_start()
                             <input type="file" name="profile_picture" class="form-control" id="profile_picture" />
                             <?php component('input-error', ['className' => ["profile_pictureError"]]) ?>
                             <div class="mt-3">
-                                <img id="profile-picture-preview" src="<?= asset('/images/user-avatar/default-avatar.png') ?>" alt="Profile Picture Preview" style="width: 100px; height: 100px; border-radius: 50%; object-fit:cover;" />
+                                <img id="profile-picture-preview" src="<?= asset(DEFAULT_USER_AVATAR) ?>" alt="Profile Picture Preview" style="width: 100px; height: 100px; border-radius: 50%; object-fit:cover;" />
                             </div>
                         </div>
 

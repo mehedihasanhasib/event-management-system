@@ -18,7 +18,7 @@
 
     .page-link {
         display: block;
-        padding: 8px 12px;
+        /* padding: 8px 12px; */
         text-decoration: none;
         color: #007bff;
         border: 1px solid #ddd;

@@ -16,7 +16,7 @@
             <div class="col-md-6 position-relative">
                 <img src="<?= asset($event['banner']) ?? DEFAULT_EVENT_BANNER ?>"
                     class="img-fluid" alt="Event Image"
-                    style="object-fit: cover; height: 100%; min-height: 400px; width: 100%;">
+                    style="object-fit: contain; height: 100%; min-height: 400px; width: 100%;">
                 <div class="position-absolute bottom-0 start-0 w-100 bg-gradient-dark p-3 text-white"
                     style="background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0));">
                     <div class="d-flex align-items-center gap-2">
@@ -51,8 +51,8 @@
 
                     <!-- Location -->
                     <div class="mb-4">
-                        <div class="d-flex align-items-center mb-2">
-                            <i class="bi bi-geo-alt-fill text-primary me-2"></i>
+                        <div class="d-flex align-items-center mb-2 gap-2">
+                            <span>Location:</span>
                             <h6 class="fw-bold mb-0"><?= htmlspecialchars($event['location_name']) ?></h6>
                         </div>
                         <p class="text-muted small mb-0"><?= htmlspecialchars($event['location_address'] ?? '') ?></p>
