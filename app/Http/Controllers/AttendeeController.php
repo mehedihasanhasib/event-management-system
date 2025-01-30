@@ -8,13 +8,17 @@ use App\Helpers\DB;
 use App\Http\Request;
 use App\Models\Attendee;
 use App\Models\Event;
+use App\Models\Location;
 
 class AttendeeController extends Controller
 {
     public function index(Request $request, $id)
     {
-        $attendees = DB::query(
-            "SELECT 
+        $attendee_name = $request->input('name') ?? null;
+        $attendee_location = $request->input('location') ?? null;
+        $attendee_phone = $request->input('phone') ?? null;
+
+        $query = "SELECT 
                 attendees.*,
                 locations.name AS location_name
             FROM
@@ -24,15 +28,33 @@ class AttendeeController extends Controller
             JOIN
                 locations ON attendees.location_id = locations.id
             WHERE 
-                attendees.event_id = :event_id AND events.user_id = :user_id",
-            [
-                'event_id' => $id,
-                'user_id' => auth()['id']
-            ]
-        );
+                attendees.event_id = :event_id AND events.user_id = :user_id";
+
+        $bindings = [
+            'event_id' => $id,
+            'user_id' => auth()['id']
+        ];
+
+        if ($attendee_name) {
+            $query .= " AND attendees.name LIKE :name";
+            $bindings['name'] = '%' . $attendee_name . '%';
+        }
+
+        if ($attendee_location) {
+            $query .= " AND attendees.location_id = :location_id";
+            $bindings['location_id'] = $attendee_location;
+        }
+
+        if ($attendee_phone) {
+            $query .= " AND attendees.phone_number = :phone";
+            $bindings['phone'] = $attendee_phone;
+        }
+
+        $attendees = DB::query($query, $bindings);
 
         $event = DB::query(
-            "SELECT 
+            "SELECT
+                events.id,
                 events.title,
                 events.date,
                 locations.name AS event_location
@@ -47,7 +69,10 @@ class AttendeeController extends Controller
             ]
         );
 
-        return $this->view('attendees.index', ['attendees' => $attendees, 'event' => $event[0]]);
+        $location = new Location();
+        $locations = $location->orderBy('id', 'asc')->get();
+
+        return $this->view('attendees.index', ['attendees' => $attendees, 'event' => $event[0], 'locations' => $locations]);
     }
 
     public function store(Request $request)
@@ -70,7 +95,7 @@ class AttendeeController extends Controller
 
             $total_attendees = $attendee->where('event_id', "=", 17)->count();
             $total_capacity = $events->where('id', "=", $request->input('event_id'))->get(['capacity']);
-            
+
             if ($total_attendees >= $total_capacity) {
                 return json_response(['status' => false, 'errors' => "Event is full"]);
             }

@@ -17,18 +17,31 @@
 
     <!-- Filter Section -->
     <div class="py-4">
-        <form class="row g-3">
+        <form id="filterForm" method="GET" action="<?= route('attendee.index', ['id' => $event['id']]) ?>" class="row g-3">
+            <?php
+            $name = $_GET['name'] ?? '';
+            $location_id = $_GET['location'] ?? 0;
+            $phone = $_GET['phone'] ?? '';
+            ?>
             <div class="col-md-4">
-                <input type="text" class="form-control" placeholder="Search by name..." name="name">
+                <input type="text" class="form-control" value="<?= htmlspecialchars($name) ?>" placeholder="Search by name..." name="name">
             </div>
             <div class="col-md-3">
-                <input type="text" class="form-control" placeholder="Filter by location..." name="location">
+                <select class="form-select" name="location">
+                    <option value="">Select Location</option>
+                    <?php foreach ($locations as $location) : ?>
+                        <option <?= $location['id'] == $location_id ? 'selected' : '' ?> value="<?= $location['id'] ?>"><?= $location['name'] ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
             <div class="col-md-3">
-                <input type="text" class="form-control" placeholder="Search by phone..." name="phone">
+                <input type="text" class="form-control" value="<?= htmlspecialchars($phone) ?>" placeholder="Search by phone..." name="phone">
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
                 <button type="submit" class="btn btn-primary w-100">Search</button>
+            </div>
+            <div class="col-md-1">
+                <a href="<?= route('attendee.index', ['id' => $event['id']]) ?>" class="btn btn-secondary w-100">Reset</a>
             </div>
         </form>
     </div>
@@ -43,7 +56,6 @@
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Attendee Location</th>
-                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -54,10 +66,6 @@
                         <td><?= htmlspecialchars($attendee['email']); ?></td>
                         <td><?= htmlspecialchars($attendee['phone_number']); ?></td>
                         <td><?= htmlspecialchars($attendee['location_name']); ?></td>
-                        <td>
-                            <a href="attendee_edit.php?id=<?= $attendee['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
-                            <a href="attendee_delete.php?id=<?= $attendee['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to remove this attendee?');">Remove</a>
-                        </td>
                     </tr>
                     <!-- <tr>
                     <td colspan="6" class="text-center">No attendees found</td>
@@ -69,6 +77,30 @@
     </div>
 </div>
 
+<?php ob_start() ?>
+<script>
+    $("#filterForm").on("submit", function(event) {
+        event.preventDefault();
+
+        let formData = $(this).serializeArray();
+
+        formData = formData.filter(function(field) {
+            return field.value.trim() !== "";
+        });
+
+        const filteredFormData = new URLSearchParams();
+        formData.forEach(function(field) {
+            filteredFormData.append(field.name, field.value);
+        });
+
+        const actionUrl = $(this).attr("action");
+
+        window.location.href = `${actionUrl}?${filteredFormData.toString()}`;
+    });
+</script>
+
+<?php $script = ob_get_clean(); ?>
+
 <?php
 $content = ob_get_clean();
-layout('master', compact('content'));
+layout('master', compact('content', 'script'));
