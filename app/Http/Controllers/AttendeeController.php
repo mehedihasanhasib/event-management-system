@@ -14,6 +14,59 @@ class AttendeeController extends Controller
 {
     public function index(Request $request, $id)
     {
+        // dd($_SERVER);
+        $exportCSV = $request->input('export') ?? false;
+        $data = $this->getData($request, $id);
+
+        if ($exportCSV) {
+            $this->exportCSV($data['attendees']);
+        }
+
+        return $this->view('attendees.index', $data);
+    }
+
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'event_id' => ['required', 'exists:events,id'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'phone_number' => ['required', 'max:11'],
+            'location' => ['required', 'exists:locations,id'],
+        ]);
+
+        if ($validator->fails()) {
+            return json_response(['errors' => $validator->errors()], 422);
+        }
+
+        try {
+            $attendee = new Attendee();
+            $events = new Event();
+
+            $total_attendees = $attendee->where('event_id', "=", 17)->count();
+            $total_capacity = $events->where('id', "=", $request->input('event_id'))->get(['capacity']);
+
+            if ($total_attendees >= $total_capacity) {
+                return json_response(['status' => false, 'errors' => "Event is full"]);
+            }
+
+            $attendee->create([
+                'event_id' => $request->input('event_id'),
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'phone_number' => $request->input('phone_number'),
+                'location_id' => $request->input('location'),
+            ]);
+
+            return json_response(['status' => true, 'message' => 'Registration successful'], 201);
+        } catch (\Throwable $th) {
+            // return json_response(['status' => false, 'errors' => $th->getMessage()], 500);
+            return json_response(['status' => false, 'errors' => "Registration Failed, Try Again!"], 500);
+        }
+    }
+
+    public function getData($request, $id)
+    {
         $attendee_name = $request->input('name') ?? null;
         $attendee_location = $request->input('location') ?? null;
         $attendee_phone = $request->input('phone') ?? null;
@@ -63,7 +116,8 @@ class AttendeeController extends Controller
             JOIN
                 locations ON events.location_id = locations.id
             WHERE
-                events.id = :event_id",
+                events.id = :event_id
+            LIMIT 1",
             [
                 'event_id' => $id,
             ]
@@ -72,46 +126,31 @@ class AttendeeController extends Controller
         $location = new Location();
         $locations = $location->orderBy('id', 'asc')->get();
 
-        return $this->view('attendees.index', ['attendees' => $attendees, 'event' => $event[0], 'locations' => $locations]);
+        return ['attendees' => $attendees, 'event' => $event, 'locations' => $locations];
     }
 
-    public function store(Request $request)
+    public function exportCSV($attendees)
     {
-        $validator = Validator::make($request->all(), [
-            'event_id' => ['required', 'exists:events,id'],
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255'],
-            'phone_number' => ['required', 'max:11'],
-            'location' => ['required', 'exists:locations,id'],
-        ]);
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename=attendees.csv');
 
-        if ($validator->fails()) {
-            return json_response(['errors' => $validator->errors()], 422);
-        }
+        $output = fopen('php://output', 'w');
 
-        try {
-            $attendee = new Attendee();
-            $events = new Event();
+        fputcsv($output, ["ID", "Name", "Email", "Number", "Location"]);
 
-            $total_attendees = $attendee->where('event_id', "=", 17)->count();
-            $total_capacity = $events->where('id', "=", $request->input('event_id'))->get(['capacity']);
+        $data = $attendees;
 
-            if ($total_attendees >= $total_capacity) {
-                return json_response(['status' => false, 'errors' => "Event is full"]);
-            }
-
-            $attendee->create([
-                'event_id' => $request->input('event_id'),
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'phone_number' => $request->input('phone_number'),
-                'location_id' => $request->input('location'),
+        foreach ($data as $key => $row) {
+            fputcsv($output, [
+                $key + 1,
+                $row['name'],
+                $row['email'],
+                $row['phone_number'],
+                $row['location_name'],
             ]);
-
-            return json_response(['status' => true, 'message' => 'Registration successful'], 201);
-        } catch (\Throwable $th) {
-            // return json_response(['status' => false, 'errors' => $th->getMessage()], 500);
-            return json_response(['status' => false, 'errors' => "Registration Failed, Try Again!"], 500);
         }
+
+        fclose($output);
+        exit;
     }
 }

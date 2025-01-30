@@ -3,7 +3,7 @@
 <div class="container my-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Attendee List</h1>
-        <a href="export_csv.php" class="btn btn-success">
+        <a href="<?= $_SERVER['PATH_INFO']. "?" . http_build_query(array_merge($_GET, ['export' => true])) ?>" class="btn btn-success">
             <i class="bi bi-file-earmark-excel me-2"></i>Export to CSV
         </a>
     </div>
@@ -48,7 +48,7 @@
 
     <!-- Attendee Table -->
     <div class="table-responsive">
-        <table class="table table-bordered table-striped table-hover align-middle">
+        <table id="attendee-table" class="table table-bordered table-striped table-hover align-middle">
             <thead class="table-dark">
                 <tr>
                     <th>#</th>
@@ -79,24 +79,28 @@
 
 <?php ob_start() ?>
 <script>
-    $("#filterForm").on("submit", function(event) {
-        event.preventDefault();
+    $(document).ready(function() {
 
-        let formData = $(this).serializeArray();
+        $("#filterForm").on("submit", function(event) {
+            event.preventDefault();
 
-        formData = formData.filter(function(field) {
-            return field.value.trim() !== "";
+            let formData = $(this).serializeArray();
+
+            formData = formData.filter(function(field) {
+                return field.value.trim() !== "";
+            });
+
+            const filteredFormData = new URLSearchParams();
+            formData.forEach(function(field) {
+                filteredFormData.append(field.name, field.value);
+            });
+
+            const actionUrl = $(this).attr("action");
+
+            window.location.href = `${actionUrl}?${filteredFormData.toString()}`;
         });
 
-        const filteredFormData = new URLSearchParams();
-        formData.forEach(function(field) {
-            filteredFormData.append(field.name, field.value);
-        });
-
-        const actionUrl = $(this).attr("action");
-
-        window.location.href = `${actionUrl}?${filteredFormData.toString()}`;
-    });
+    })
 </script>
 
 <?php $script = ob_get_clean(); ?>
