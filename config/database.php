@@ -6,7 +6,7 @@ return [
         'port' => 3306,
         'dbname' => 'ollyo-test',
         'username' => 'root',
-        'password' => '',
+        'password' => 'root1234',
 
         // 'host' => 'localhost',
         // 'port' => 3306,
