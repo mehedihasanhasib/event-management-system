@@ -26,7 +26,7 @@ class SessionController extends Controller
                 'email' => $user['email'],
                 'profile_picture' => $user['profile_picture'],
             ]);
-            return json_response(['status' => true, 'message' => 'Login Successful']);
+            return json_response(['status' => true, 'message' => 'Successfully logged in'], 200);
         }
 
         return json_response(['errors' => 'Credentials doesn\'t match'], 401);
