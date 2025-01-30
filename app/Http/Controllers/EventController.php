@@ -50,7 +50,7 @@ class EventController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'event_title' => ['required', 'string', 'max:255'],
-            'event_slug' => ['required', 'string', 'max:255'],
+            'event_slug' => ['required', 'string', 'max:255', 'unique:events,slug'],
             'event_description' => ['required', 'string', 'max:1000'],
             'event_date' => ['required', function ($value, $field, $fail) {
                 $startDate = strtotime(date('Y-m-d', strtotime($value)));

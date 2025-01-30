@@ -89,9 +89,17 @@
     $(document).ready(function() {
         const eventCreateForm = $("#event-create-form")
         const bannerInput = $("#banner")
+        const eventTitle = $("#eventTitle")
+        const eventSlug = $("#eventSlug")
 
         bannerInput.on("change", function(event) {
             preview(event, "banner-preview")
+        })
+
+        eventTitle.on("change keypress", function(event) {
+            const title = event.target.value
+            const slug = title.toLowerCase().replace(/[\s_,]+/g, "-")
+            eventSlug.val(slug)
         })
 
         eventCreateForm.on("submit", function(event) {
