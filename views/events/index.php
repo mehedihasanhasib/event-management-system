@@ -29,7 +29,7 @@
                         <tr>
                             <td><?= $index + 1; ?></td>
                             <td><?= htmlspecialchars($event['title']); ?></td>
-                            <td><?= htmlspecialchars(substr($event['description'], 0, 50) . " ..."); ?></td>
+                            <td><?= htmlspecialchars(strlen($event['description']) > 40 ?  substr($event['description'], 0, 40) . " ..." : $event['description']); ?></td>
                             <td><?= htmlspecialchars($event['date']); ?></td>
                             <td><?= htmlspecialchars($event['location_name']); ?></td>
                             <td class="text-center"><?= htmlspecialchars($event['capacity']); ?></td>
