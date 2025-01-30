@@ -45,7 +45,7 @@ class AttendeeController extends Controller
 
             $total_attendees = $attendee->where('event_id', "=", 17)->count();
             $event = $events->where('id', "=", $request->input('event_id'))->get(['capacity']);
-            
+
             if ($total_attendees >= $event['capacity']) {
                 return json_response(['status' => false, 'errors' => "Event is full"]);
             }
@@ -68,6 +68,7 @@ class AttendeeController extends Controller
     public function getData($request, $id)
     {
         $attendee_name = $request->input('name') ?? null;
+        $attendee_email = $request->input('email') ?? null;
         $attendee_location = $request->input('location') ?? null;
         $attendee_phone = $request->input('phone') ?? null;
 
@@ -101,6 +102,11 @@ class AttendeeController extends Controller
         if ($attendee_phone) {
             $query .= " AND attendees.phone_number = :phone";
             $bindings['phone'] = $attendee_phone;
+        }
+
+        if ($attendee_email) {
+            $query .= " AND attendees.email = :email";
+            $bindings['email'] = $attendee_email;
         }
 
         $attendees = DB::query($query, $bindings);

@@ -21,15 +21,17 @@ This is a simple web-based Event Management System built using pure PHP with a c
 - **Attendee Registration**: Users can register for events with capacity checks.
 - **Event Dashboard**: Displays events in a paginated, sortable, and filterable format.
 - **Event Reports**: Admins can download event attendee lists in CSV format.
+- **Event Search**: Users can search for events by name, location or date.
+- **Attendees Search**: Admins can search attendees by name, location, phone number or email.
 
-### 3. Security & Validation
+### 4. Security & Validation
 
 - **Client-side and Server-side Validation**: Ensures form integrity.
 - **Prepared Statements**: Prevents SQL injection attacks.
 - **Secure Password Hashing**: Uses `password_hash()` for safe authentication.
 - **Custom Validation Class**: Validates input data consistently across the application.
 
-### 4. Responsive UI
+### 5. Responsive UI
 
 - **Bootstrap-powered UI**: Ensures a clean, responsive interface for all devices.
 
@@ -65,3 +67,4 @@ This is a simple web-based Event Management System built using pure PHP with a c
 ## Future Enhancements
 
 - API endpoints for all the events
+- Used AJAX for form submission
