@@ -52,7 +52,13 @@ class EventController extends Controller
             'event_title' => ['required', 'string', 'max:255'],
             'event_slug' => ['required', 'string', 'max:255'],
             'event_description' => ['required', 'string', 'max:1000'],
-            'event_date' => ['required'],
+            'event_date' => ['required', function ($value, $field, $fail) {
+                $startDate = strtotime(date('Y-m-d', strtotime($value)));
+                $currentDate = strtotime(date('Y-m-d'));
+                if ($startDate < $currentDate) {
+                    $fail($field, "Event Date must be in the future.");
+                };
+            }],
             'event_time' => ['required'],
             'location' => ['required'],
             'max_capacity' => ['required', 'numeric'],
