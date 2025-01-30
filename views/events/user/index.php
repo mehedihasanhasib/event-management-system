@@ -46,114 +46,136 @@
         pointer-events: none;
         border-color: #007bff;
     }
+
+    .offcanvas {
+        max-width: 300px;
+    }
+
+    .sorting-dropdown {
+        min-width: 200px;
+    }
 </style>
 <?php $style = ob_get_clean(); ?>
 
 <?php ob_start(); ?>
 <div class="container my-5">
-    <!-- Filter Form -->
-    <form id="filterForm" class="mb-4 p-3 border rounded shadow-sm" method="GET" action="<?= route('events') ?>">
-        <?php
-        $title = $_GET['title'] ?? "";
-        $date_from = $_GET['date_from'] ?? "";
-        $date_to = $_GET['date_to'] ?? "";
-        $location_id = $_GET['location'] ?? 0;
-        ?>
-        <div class="row g-3">
-            <!-- Title -->
-            <div class="col-md-3">
-                <label class="form-label fw-semibold">Title</label>
-                <input type="text" class="form-control" name="title" value="<?= $title ?>" placeholder="Search By Title">
-            </div>
+    <!-- Top bar with filter toggle and sorting -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <!-- Filter toggle button (mobile) using Bootstrap's data attributes -->
+        <button class="btn btn-primary d-md-none"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#filterOffcanvas">
+            <i class="fas fa-filter"></i> Filters
+        </button>
 
-            <!-- Location -->
-            <div class="col-md-3">
-                <label class="form-label fw-semibold">Location</label>
-                <select class="form-select" name="location">
-                    <option value="">Select Location</option>
-                    <?php foreach ($locations as $location) : ?>
-                        <option <?= $location['id'] == $location_id ? 'selected' : '' ?> value="<?= $location['id'] ?>"><?= $location['name'] ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-
-            <!-- Date From -->
-            <div class="col-md-3">
-                <label class="form-label fw-semibold">Date From</label>
-                <input type="date" class="form-control" name="date_from" value="<?= $date_from ?>" name="date_from">
-            </div>
-
-            <!-- Date To -->
-            <div class="col-md-3">
-                <label class="form-label fw-semibold">Date To</label>
-                <input type="date" class="form-control" name="date_to" value="<?= $date_to ?>" name="date_to">
-            </div>
-
-            <!-- Submit Button -->
-            <div class="col-12 d-flex gap-2 text-end">
-                <a href="<?= route('events') ?>" class="btn btn-secondary btn-lg w-100" id="resetFilter">Reset</a>
-                <button type="submit" class="btn btn-primary btn-lg w-100">Filter</button>
-            </div>
+        <!-- Sorting dropdown -->
+        <div class="dropdown ms-auto">
+            <button class="btn btn-outline-secondary dropdown-toggle sorting-dropdown"
+                type="button"
+                data-bs-toggle="dropdown">
+                Sort By
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="<?= $_SERVER['PATH_INFO'] . "?" . http_build_query(array_merge($_GET, ['sort' => 'asc'])) ?>">Recent</a></li>
+                <li><a class="dropdown-item" href="<?= $_SERVER['PATH_INFO'] . "?" . http_build_query(array_merge($_GET, ['sort' => 'desc'])) ?>">Late</a></li>
+            </ul>
         </div>
-    </form>
+    </div>
+
+    <?php
+    $title = $_GET['title'] ?? "";
+    $date_from = $_GET['date_from'] ?? "";
+    $date_to = $_GET['date_to'] ?? "";
+    $location_id = $_GET['location'] ?? 0;
+    ?>
+
+    <!-- Offcanvas Filter (mobile) -->
+    <div class="offcanvas offcanvas-start" id="filterOffcanvas">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Filters</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <?php component('event-filter', [
+                'title' => $title,
+                'date_from' => $date_from,
+                'date_to' => $date_to,
+                'location_id' => $location_id,
+                'locations' => $locations,
+            ]) ?>
+        </div>
+    </div>
+
+    <!-- Desktop filter -->
+    <div class="d-none d-md-block mb-4">
+        <?php component('event-filter', [
+            'title' => $title,
+            'date_from' => $date_from,
+            'date_to' => $date_to,
+            'location_id' => $location_id,
+            'locations' => $locations,
+        ]) ?>
+    </div>
+
+    <!-- Events grid -->
     <div class="row g-4">
         <?php foreach ($events['data'] as $event): ?>
             <?php component('event-card', ['event' => $event]) ?>
         <?php endforeach; ?>
     </div>
-</div>
 
-<!-- Pagination Controls -->
-<div class="d-flex justify-content-center mt-4">
-    <?php
-    $currentPage = $events['pagination']['current_page'];
-    $totalPages = $events['pagination']['total_pages'];
-    $previous = max(1, $currentPage - 1);
-    $next = min($totalPages, $currentPage + 1);
-    $queryString = $_GET;
-    unset($queryString['page']);
-    $queryString = http_build_query($queryString) . "&";
+    <!-- Pagination Controls -->
+    <div class="d-flex justify-content-center mt-4">
+        <?php
+        $currentPage = $events['pagination']['current_page'];
+        $totalPages = $events['pagination']['total_pages'];
+        $previous = max(1, $currentPage - 1);
+        $next = min($totalPages, $currentPage + 1);
+        $queryString = $_GET;
+        unset($queryString['page']);
+        $queryString = http_build_query($queryString) . "&";
 
-    component('pagination', [
-        'currentPage' => $currentPage,
-        'totalPages' => $totalPages,
-        'previous' => $previous,
-        'next' => $next,
-        'queryString' => $queryString
-    ])
-    ?>
-</div>
+        component('pagination', [
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
+            'previous' => $previous,
+            'next' => $next,
+            'queryString' => $queryString
+        ])
+        ?>
+    </div>
 
-<?php ob_start() ?>
-<script>
-    $("#filterForm").on("submit", function(event) {
-        event.preventDefault();
+    <?php ob_start() ?>
+    <script>
+        $(".filterForm").on("submit", function(event) {
+            event.preventDefault();
 
-        const dateFrom = $("input[name='date_from']").val().trim();
-        const dateTo = $("input[name='date_to']").val().trim();
+            const dateFrom = $("input[name='date_from']").val().trim();
+            const dateTo = $("input[name='date_to']").val().trim();
 
-        if ((dateFrom && !dateTo) || (!dateFrom && dateTo)) {
-            alert("Please provide both 'Date From' and 'Date To' fields, or leave both empty.");
-            return;
-        }
+            if ((dateFrom && !dateTo) || (!dateFrom && dateTo)) {
+                alert("Please provide both 'Date From' and 'Date To' fields, or leave both empty.");
+                return;
+            }
 
-        let formData = $(this).serializeArray();
+            let formData = $(this).serializeArray();
 
-        formData = formData.filter(function(field) {
-            return field.value.trim() !== "";
+            formData = formData.filter(function(field) {
+                return field.value.trim() !== "";
+            });
+
+            const filteredFormData = new URLSearchParams();
+            formData.forEach(function(field) {
+                filteredFormData.append(field.name, field.value);
+            });
+
+            const actionUrl = $(this).attr("action");
+            window.location.href = `${actionUrl}?${filteredFormData.toString()}`;
         });
+    </script>
 
-        const filteredFormData = new URLSearchParams();
-        formData.forEach(function(field) {
-            filteredFormData.append(field.name, field.value);
-        });
+    <?php $script = ob_get_clean(); ?>
 
-        const actionUrl = $(this).attr("action");
-        window.location.href = `${actionUrl}?${filteredFormData.toString()}`;
-    });
-</script>
-
-<?php $script = ob_get_clean(); ?>
-
-<?php $content = ob_get_clean(); ?>
-<?php layout('master', compact('content', 'style', 'script')); ?>
+    <?php $content = ob_get_clean(); ?>
+    <?php layout('master', compact('content', 'style', 'script')); ?>

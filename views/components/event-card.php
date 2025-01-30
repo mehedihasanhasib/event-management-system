@@ -2,7 +2,7 @@
 $title = htmlspecialchars($event['title']);
 $description = htmlspecialchars($event['description']);
 $banner = htmlspecialchars($event['banner']);
-$date = htmlspecialchars($event['date']);
+$date = htmlspecialchars(date("F j, Y", strtotime($event['date'])));
 ?>
 
 <div class="col-12 col-md-6 col-lg-4">

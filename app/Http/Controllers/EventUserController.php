@@ -35,7 +35,10 @@ class EventUserController extends Controller
 
                 return $query->whereBetween('date', [$request->input('date_from'), $request->input('date_to')]); // search by date
 
-            })->orderBy('id', 'desc')->paginate(9);
+            })->when($request->has('sort'), function ($query) use ($request) {
+
+                return $query->orderBy('date', $request->input('sort'));
+            })->paginate(9);
 
             return $this->view('events.user.index', ['events' => $events, 'locations' => $this->locations]);
         } catch (\Throwable $th) {
@@ -70,9 +73,8 @@ class EventUserController extends Controller
                 ]
             );
 
-            if($event['id'] == null)
-            {
-                return redirect(route('events'));   
+            if ($event['id'] == null) {
+                return redirect(route('events'));
             }
 
             $this->view('events.user.show', ['event' => $event, 'locations' => $this->locations]);
