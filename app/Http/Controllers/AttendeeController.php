@@ -29,10 +29,19 @@ class AttendeeController extends Controller
         $validator = Validator::make($request->all(), [
             'event_id' => ['required', 'exists:events,id'],
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255'],
-            'phone_number' => ['required', function ($value, $field, $fails) {
+            'email' => ['required', 'email', function ($value, $field, $fail) use ($request) {
+                $result = DB::query('SELECT email FROM attendees WHERE email = :email AND event_id = :event_id', [
+                    'email' => $value,
+                    'event_id' => $request->input('event_id'),
+                ]);
+
+                if (!empty($result)) {
+                    $fail($field, 'Email already registered, use a different email.');
+                }
+            }, 'max:255'],
+            'phone_number' => ['required', function ($value, $field, $fail) {
                 if (!str_starts_with($value, "01")) {
-                    $fails($field, 'Invalid Phone Number. Must starts with 01');
+                    $fail($field, 'Invalid Phone Number. Must starts with 01');
                 }
             }, 'max:11'],
             'location' => ['required', 'exists:locations,id'],
