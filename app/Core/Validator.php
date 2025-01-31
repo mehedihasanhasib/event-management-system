@@ -14,6 +14,10 @@ class Validator
                     $rule($data[$field], $field, function ($message) use ($field) {
                         self::$errors[$field][] = $message;
                     });
+                } elseif (is_object($rule)) {
+                    $rule->validate($data[$field], $field, function ($message) use ($field) {
+                        self::$errors[$field][] = $message;
+                    });
                 } else {
                     switch ($rule) {
                         case 'required':

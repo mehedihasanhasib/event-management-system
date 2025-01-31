@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Validator;
-use App\Core\Controller;
 use App\Helpers\DB;
 use App\Http\Request;
-use App\Models\Attendee;
 use App\Models\Event;
+use App\Core\Validator;
+use App\Core\Controller;
+use App\Models\Attendee;
 use App\Models\Location;
+use App\Rules\AttendeeUniqueEmail;
+use App\Rules\AttendeeValidPhoneNumber;
+use App\Rules\AttendeeUniquePhoneNumber;
 
 class AttendeeController extends Controller
 {
@@ -29,30 +32,8 @@ class AttendeeController extends Controller
         $validator = Validator::make($request->all(), [
             'event_id' => ['required', 'exists:events,id'],
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', function ($value, $field, $fail) use ($request) {
-                $result = DB::query('SELECT email FROM attendees WHERE email = :email AND event_id = :event_id', [
-                    'email' => $value,
-                    'event_id' => $request->input('event_id'),
-                ]);
-
-                if (!empty($result)) {
-                    $fail('Email already registered, use a different email.');
-                }
-            }, 'max:255'],
-            'phone_number' => ['required', function ($value, $field, $fail) {
-                if (!str_starts_with($value, "01")) {
-                    $fail('Invalid Phone Number. Must starts with 01');
-                }
-            }, function ($value, $field, $fail) use ($request) {
-                $result = DB::query('SELECT phone_number FROM attendees WHERE phone_number = :phone_number AND event_id = :event_id', [
-                    'phone_number' => $value,
-                    'event_id' => $request->input('event_id'),
-                ]);
-
-                if (!empty($result)) {
-                    $fail('Phone number already registered, use a different one.');
-                }
-            }, 'max:11'],
+            'email' => ['required', 'email', new AttendeeUniqueEmail($request), 'max:255'],
+            'phone_number' => ['required', new AttendeeValidPhoneNumber, new AttendeeUniquePhoneNumber($request), 'max:11'],
             'location' => ['required', 'exists:locations,id'],
         ]);
 
