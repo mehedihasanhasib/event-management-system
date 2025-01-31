@@ -35,6 +35,11 @@ This is a simple web-based Event Management System built using pure PHP with **M
 
 - **Bootstrap-powered UI**: Ensures a clean, responsive interface for all devices.
 
+## Enhancements
+
+- API endpoints for all the events
+- Used AJAX for form submission
+
 ## Installation & Setup
 
 ### Prerequisites
@@ -66,8 +71,3 @@ This is a simple web-based Event Management System built using pure PHP with **M
    php -S localhost:8000 -t public
    ```
 5. Access the system at `http://localhost:8000`
-
-## Future Enhancements
-
-- API endpoints for all the events
-- Used AJAX for form submission
