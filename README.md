@@ -38,7 +38,15 @@ This is a simple web-based Event Management System built using pure PHP with **M
 
 ## Enhancements
 
-- API endpoints for all the events
+- API endpoints for all the events and event details
+
+```
+| Endpoint          | Method |
+|-------------------|--------|
+| '/api/events'     | GET    |
+| '/api/events/{id}'| GET    |
+```
+
 - Used AJAX for form submission
 
 ## Installation & Setup
@@ -52,13 +60,13 @@ This is a simple web-based Event Management System built using pure PHP with **M
 ### Steps
 
 1. Clone this repository:
-   
+
    ```bash
    git clone https://github.com/mehedihasanhasib/event-management-system.git
    ```
 
 2. Configure the `config/database.php` file as your database:
-   
+
    ```bash
     'host' => 'localhost',
     'port' => 3306,
@@ -70,7 +78,7 @@ This is a simple web-based Event Management System built using pure PHP with **M
 3. Create a database with the same name provided in the `config/database.php` file and import the provided database schema (`database.sql`) into MySQL (if face any error change database collation to `utf8mb4_general_ci` or `utf8mb4_unicode_ci`).
 
 4. Open a terminal in the project root directory and start a local server by running the following command:
-   
+
    ```bash
    php -S localhost:8000 -t public
    ```
@@ -80,5 +88,5 @@ This is a simple web-based Event Management System built using pure PHP with **M
 ## Demo Account Credentials
 
 **Email:** demo@example.com
- 
+
 **Password:** 12345678
