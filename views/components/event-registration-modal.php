@@ -13,12 +13,12 @@
             </div>
             <div class="modal-body">
                 <div class="card-body p-4">
-                    <div class="alert alert-warning d-flex align-items-center mb-4" role="alert">
+                    <!-- <div class="alert alert-warning d-flex align-items-center mb-4" role="alert">
                         <i class="bi bi-exclamation-triangle-fill me-2"></i>
                         <div>
                             Only 3 seats remaining! Complete your registration soon.
                         </div>
-                    </div>
+                    </div> -->
 
                     <form id="eventRegistrationForm" method="POST" action="<?= route('attendee.store') ?>">
                         <input type="hidden" name="event_id" value="<?= $event['id'] ?>">
