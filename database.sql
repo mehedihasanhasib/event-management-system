@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 31, 2025 at 05:41 AM
+-- Generation Time: Jan 31, 2025 at 02:46 PM
 -- Server version: 8.4.4
 -- PHP Version: 8.3.6
 
@@ -10532,7 +10532,7 @@ INSERT INTO `users` (`id`, `name`, `email`, `profile_picture`, `password`) VALUE
 (41, 'Prof. Jodie Predovic', 'carolina.zulauf@example.net', 'images/user-avatar/avatar-5.jpg', '$2y$12$zypB.MW4qhWsWmlGZWnc0eZTrUA63ierWgCGDxP7LjtHbGYNPtsJC'),
 (42, 'Dr. Cole Effertz I', 'ratke.mckenzie@example.net', 'images/user-avatar/avatar-1.jpg', '$2y$12$zypB.MW4qhWsWmlGZWnc0eZTrUA63ierWgCGDxP7LjtHbGYNPtsJC'),
 (43, 'Prof. Vicenta Larson DVM', 'eichmann.cheyanne@example.org', 'images/user-avatar/avatar-9.jpg', '$2y$12$zypB.MW4qhWsWmlGZWnc0eZTrUA63ierWgCGDxP7LjtHbGYNPtsJC'),
-(44, 'Zora Boyer', 'mcglynn.nicklaus@example.net', 'images/user-avatar/avatar-9.jpg', '$2y$12$zypB.MW4qhWsWmlGZWnc0eZTrUA63ierWgCGDxP7LjtHbGYNPtsJC'),
+(44, 'Demo Account', 'demo@example.com', 'images/user-avatar/avatar-9.jpg', '$2y$12$zypB.MW4qhWsWmlGZWnc0eZTrUA63ierWgCGDxP7LjtHbGYNPtsJC'),
 (45, 'Brandi Heathcote', 'marcelo.zieme@example.com', 'images/user-avatar/avatar-7.jpg', '$2y$12$zypB.MW4qhWsWmlGZWnc0eZTrUA63ierWgCGDxP7LjtHbGYNPtsJC'),
 (46, 'Faye Crona', 'eichmann.rocio@example.net', 'images/user-avatar/avatar-5.jpg', '$2y$12$zypB.MW4qhWsWmlGZWnc0eZTrUA63ierWgCGDxP7LjtHbGYNPtsJC'),
 (47, 'Osborne O\'Hara III', 'xquigley@example.net', 'images/user-avatar/avatar-9.jpg', '$2y$12$zypB.MW4qhWsWmlGZWnc0eZTrUA63ierWgCGDxP7LjtHbGYNPtsJC'),
@@ -10549,10 +10549,11 @@ INSERT INTO `users` (`id`, `name`, `email`, `profile_picture`, `password`) VALUE
 --
 ALTER TABLE `attendees`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`),
   ADD KEY `FK_event_id` (`event_id`),
   ADD KEY `name` (`name`),
-  ADD KEY `FK2` (`location_id`);
+  ADD KEY `FK2` (`location_id`),
+  ADD KEY `email` (`email`),
+  ADD KEY `phone_number` (`phone_number`);
 
 --
 -- Indexes for table `events`
@@ -10588,7 +10589,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `attendees`
 --
 ALTER TABLE `attendees`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10001;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10007;
 
 --
 -- AUTO_INCREMENT for table `events`
