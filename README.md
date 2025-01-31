@@ -27,7 +27,7 @@ This is a simple web-based Event Management System built using pure PHP with **M
 ### 4. Security & Validation
 
 - **Client-side and Server-side Validation**: Ensures form integrity.
-- **Prepared Statements**: Prevents SQL injection attacks.
+- **Prepared Statements**: Used PDO to prevents SQL injection attacks.
 - **Secure Password Hashing**: Uses `password_hash()` for safe authentication.
 - **Custom Validation Class**: Validates input data consistently across the application.
 
@@ -51,12 +51,13 @@ This is a simple web-based Event Management System built using pure PHP with **M
 ### Steps
 
 1. Clone this repository:
-   
+
    ```bash
    git clone https://github.com/mehedihasanhasib/event-management-system.git
    ```
+
 2. Configure the `config/database.php` file as your database:
-   
+
    ```bash
     'host' => 'localhost',
     'port' => 3306,
@@ -64,10 +65,13 @@ This is a simple web-based Event Management System built using pure PHP with **M
     'username' => 'root',
     'password' => '',
    ```
-3. Create a database with the same name provided in the `config/database.php` file and import the provided database schema (`database.sql`) into MySQL.
+
+3. Create a database with the same name provided in the `config/database.php` file and import the provided database schema (`database.sql`) into MySQL (if face any error change database collation to `utf8mb4_general_ci` or `utf8mb4_unicode_ci`).
+
 4. Open a terminal in the project root folder and start a local server by running the following command:
-   
+
    ```bash
    php -S localhost:8000 -t public
    ```
+
 5. Access the system at `http://localhost:8000`

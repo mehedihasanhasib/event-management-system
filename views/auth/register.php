@@ -42,7 +42,7 @@ ob_start()
 
                         <!-- Profile Picture -->
                         <div class="mb-3">
-                            <label for="profile_picture" class="form-label">Choose Profile Picture</label><span class="text-danger">*</span>
+                            <label for="profile_picture" class="form-label">Choose Profile Picture
                             <input type="file" name="profile_picture" class="form-control" id="profile_picture" />
                             <?php component('input-error', ['className' => ["profile_pictureError"]]) ?>
                             <div class="mt-3">
