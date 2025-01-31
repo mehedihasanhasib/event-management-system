@@ -36,12 +36,12 @@ class AttendeeController extends Controller
                 ]);
 
                 if (!empty($result)) {
-                    $fail($field, 'Email already registered, use a different email.');
+                    $fail('Email already registered, use a different email.');
                 }
             }, 'max:255'],
             'phone_number' => ['required', function ($value, $field, $fail) {
                 if (!str_starts_with($value, "01")) {
-                    $fail($field, 'Invalid Phone Number. Must starts with 01');
+                    $fail('Invalid Phone Number. Must starts with 01');
                 }
             }, function ($value, $field, $fail) use ($request) {
                 $result = DB::query('SELECT phone_number FROM attendees WHERE phone_number = :phone_number AND event_id = :event_id', [
@@ -50,7 +50,7 @@ class AttendeeController extends Controller
                 ]);
 
                 if (!empty($result)) {
-                    $fail($field, 'Phone number already registered, use a different one.');
+                    $fail('Phone number already registered, use a different one.');
                 }
             }, 'max:11'],
             'location' => ['required', 'exists:locations,id'],

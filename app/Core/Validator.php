@@ -11,7 +11,7 @@ class Validator
         foreach ($rules as $field => $fieldRules) {
             foreach ($fieldRules as $rule) {
                 if (is_callable($rule)) {
-                    $rule($data[$field], $field, function ($field, $message) {
+                    $rule($data[$field], $field, function ($message) use ($field) {
                         self::$errors[$field][] = $message;
                     });
                 } else {

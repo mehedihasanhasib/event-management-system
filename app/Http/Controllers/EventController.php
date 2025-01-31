@@ -56,7 +56,7 @@ class EventController extends Controller
                 $startDate = strtotime(date('Y-m-d', strtotime($value)));
                 $currentDate = strtotime(date('Y-m-d'));
                 if ($startDate < $currentDate) {
-                    $fail($field, "Event Date must be in the future.");
+                    $fail("Event Date must be in the future.");
                 };
             }],
             'event_time' => ['required'],
