@@ -75,3 +75,7 @@ This is a simple web-based Event Management System built using pure PHP with **M
    ```
 
 5. Access the system at `http://localhost:8000`
+
+// Demo Account Credentials
+// Email: demo@example.com
+// Password: 12345678
