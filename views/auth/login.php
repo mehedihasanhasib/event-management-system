@@ -25,6 +25,9 @@
                         </div>
                     </form>
                 </div>
+                <div class="text-center mb-3">
+                    <small class="text-muted">Demo Account: <br> Email: demo@example.com <br> Password: 12345678</small>
+                </div>
                 <div class="card-footer text-center">
                     <small>Don't have an account? <a href="<?= route('register') ?>">Register here</a>.</small>
                 </div>
