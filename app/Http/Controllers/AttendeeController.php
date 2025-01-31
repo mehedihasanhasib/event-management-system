@@ -14,7 +14,6 @@ class AttendeeController extends Controller
 {
     public function index(Request $request, $id)
     {
-        // dd($_SERVER);
         $exportCSV = $request->input('export') ?? false;
         $data = $this->getData($request, $id);
 
@@ -31,7 +30,11 @@ class AttendeeController extends Controller
             'event_id' => ['required', 'exists:events,id'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
-            'phone_number' => ['required', 'max:11'],
+            'phone_number' => ['required', function ($value, $field, $fails) {
+                if (!str_starts_with($value, "01")) {
+                    $fails($field, 'Invalid Phone Number');
+                }
+            }, 'max:11'],
             'location' => ['required', 'exists:locations,id'],
         ]);
 
