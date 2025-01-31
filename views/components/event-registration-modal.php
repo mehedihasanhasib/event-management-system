@@ -8,7 +8,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="eventRegistrationModalLabel">Register for <?= htmlspecialchars($event['title']) ?></h1>
+                <h1 class="modal-title fs-5" id="eventRegistrationModalLabel">Register for <b><?= htmlspecialchars($event['title']) ?></b></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -25,17 +25,17 @@
                         <div class="mb-4">
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label class="form-label">Name</label>
+                                    <label class="form-label">Name</label><span class="text-danger">*</span>
                                     <input type="text" name="name" class="form-control form-control-lg" placeholder="John">
                                     <?php component('input-error', ['className' => ['nameError']]) ?>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Email Address</label>
+                                    <label class="form-label">Email Address</label><span class="text-danger">*</span>
                                     <input type="email" name="email" class="form-control form-control-lg" placeholder="john@example.com">
                                     <?php component('input-error', ['className' => ['emailError']]) ?>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Location</label>
+                                    <label class="form-label">Location</label><span class="text-danger">*</span>
                                     <select name="location" class="form-select form-select-lg">
                                         <option value="">Select Location</option>
                                         <?php foreach ($locations as $location): ?>
@@ -45,7 +45,7 @@
                                     <?php component('input-error', ['className' => ['locationError']]) ?>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Phone Number</label>
+                                    <label class="form-label">Phone Number</label><span class="text-danger">*</span>
                                     <input type="tel" name="phone_number" class="form-control form-control-lg" placeholder="01900000000">
                                     <?php component('input-error', ['className' => ['phone_numberError']]) ?>
                                 </div>
