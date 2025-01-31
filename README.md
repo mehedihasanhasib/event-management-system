@@ -41,8 +41,8 @@ This is a simple web-based Event Management System built using pure PHP with **M
 - API endpoints for all the events and event details
 
 ```
-| Endpoint          | Method |
-|-------------------|--------|
+| Endpoint                                  | Method |
+|-------------------------------------------|--------|
 | 'https://event.hasib.info/api/events'     | GET    |
 | 'https://event.hasib.info/api/events/{id}'| GET    |
 ```
