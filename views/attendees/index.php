@@ -18,6 +18,7 @@
     <!-- Filter Section -->
     <div class="py-4">
         <form id="filterForm" method="GET" action="<?= route('attendee.index', ['id' => $event['id']]) ?>" class="row g-3">
+            <input type="hidden" name="_token" value="<?= csrf_token() ?>">
             <?php
             $name = $_GET['name'] ?? '';
             $location_id = $_GET['location'] ?? 0;

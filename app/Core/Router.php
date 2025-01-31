@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use App\Http\Middlewares\VerifyCsrf;
 use App\Http\Request;
 
 
@@ -64,13 +65,21 @@ class Route
     {
         foreach (self::$routes as $route) {
             if ($route['uri'] == $uri) {
+                // check method
                 if ($method != $route['method']) {
                     http_response_code(405);
                     die("$method method is not supported on this route\n");
                 }
+
+                if ($method != "GET") {
+                    (new VerifyCsrf)->handle();
+                }
+
+                // apply middleware
                 if ($route['middleware'] != null) {
                     (new $route['middleware'])->handle();
                 }
+
                 $controller = new $route['controller'][0]();
                 $method = $route['controller'][1];
                 $request = new Request();
@@ -80,6 +89,7 @@ class Route
 
             $routePattern = preg_replace('/\{([a-zA-Z0-9_-]+)\}/', '([a-zA-Z0-9_-]+)', $route['uri']);
             $routePattern = "#^" . $routePattern . "$#";
+
             if (preg_match($routePattern, $uri, $matches)) {
                 array_shift($matches); // Remove the full match from the array
                 if ($method != $route['method']) {

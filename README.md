@@ -26,8 +26,9 @@ This is a simple web-based Event Management System built using pure PHP with **M
 
 ### 4. Security & Validation
 
-- **Client-side and Server-side Validation**: Ensures form integrity.
-- **Prepared Statements**: Used PDO to prevents SQL injection attacks.
+- **CSRF Protection**: Implemented token-based protection against cross-site request forgery attacks.
+- **XSS Protection**: Used HTML escaping to prevent cross-site scripting attacks.
+- **SQL Injection Protection**: Utilized PDO prepared statements to prevent SQL injection attacks.
 - **Secure Password Hashing**: Uses `password_hash()` for safe authentication.
 - **Custom Validation Class**: Validates input data consistently across the application.
 

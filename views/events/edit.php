@@ -6,8 +6,9 @@
             <div class="card shadow">
                 <div class="card-body">
                     <form id="event-update-form" action="<?= route('event.update') ?>" method="POST">
-                        <input type="hidden" name="id" value="<?= $event['id'] ?? '' ?>">
+                        <input type="hidden" name="_token" value="<?= csrf_token() ?>">
                         <input type="hidden" name="_method" value="PUT">
+                        <input type="hidden" name="id" value="<?= $event['id'] ?? '' ?>">
                         <!-- Event Name -->
                         <div class="mb-3">
                             <label for="eventTitle" class="form-label">Event Title</label>

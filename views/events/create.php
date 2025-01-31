@@ -7,6 +7,7 @@
             <div class="card shadow">
                 <div class="card-body">
                     <form id="event-create-form" action="<?= route('event.store') ?>" method="POST">
+                        <input type="hidden" name="_token" value="<?= csrf_token() ?>">
                         <!-- Event Name -->
                         <div class="mb-3">
                             <label for="eventTitle" class="form-label">Event Title</label><span class="text-danger">*</span>
