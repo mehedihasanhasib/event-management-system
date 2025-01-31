@@ -43,6 +43,15 @@ class AttendeeController extends Controller
                 if (!str_starts_with($value, "01")) {
                     $fail($field, 'Invalid Phone Number. Must starts with 01');
                 }
+            }, function ($value, $field, $fail) use ($request) {
+                $result = DB::query('SELECT phone_number FROM attendees WHERE phone_number = :phone_number AND event_id = :event_id', [
+                    'phone_number' => $value,
+                    'event_id' => $request->input('event_id'),
+                ]);
+
+                if (!empty($result)) {
+                    $fail($field, 'Phone number already registered, use a different one.');
+                }
             }, 'max:11'],
             'location' => ['required', 'exists:locations,id'],
         ]);
