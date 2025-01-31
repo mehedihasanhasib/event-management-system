@@ -2,6 +2,7 @@
 
 use App\Core\Auth;
 use App\Core\Route;
+use App\Core\Session;
 
 function layout(string $layout, array $data = [])
 {
@@ -34,7 +35,6 @@ function redirect($url = "/", $status_code = 200)
 
 function json_response($data, $status_code = 200)
 {
-    // send json response with status code
     http_response_code($status_code);
     header('Content-Type: application/json');
     $response = $data;
@@ -77,6 +77,16 @@ function sanitize_input($input)
 function isActiveRoute($route)
 {
     return isRoute($route) ? 'active' : '';
+}
+
+function csrf_token()
+{
+    if (Session::has('csrf_token')) {
+        return Session::get('csrf_token');
+    }
+    
+    Session::put('csrf_token', bin2hex(random_bytes(32)));
+    return Session::get('csrf_token');
 }
 
 function dd($value)

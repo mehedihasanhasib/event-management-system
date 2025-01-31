@@ -11,6 +11,7 @@ ob_start()
                 </div>
                 <div class="card-body">
                     <form id="registration-from" action="<?= route('register.store') ?>" method="POST">
+                        <input type="hidden" name="_token" value="<?= csrf_token() ?>">
 
                         <!-- Name -->
                         <div class="mb-3">
@@ -43,11 +44,11 @@ ob_start()
                         <!-- Profile Picture -->
                         <div class="mb-3">
                             <label for="profile_picture" class="form-label">Choose Profile Picture
-                            <input type="file" name="profile_picture" class="form-control" id="profile_picture" />
-                            <?php component('input-error', ['className' => ["profile_pictureError"]]) ?>
-                            <div class="mt-3">
-                                <img id="profile-picture-preview" src="<?= asset(DEFAULT_USER_AVATAR) ?>" alt="Profile Picture Preview" style="width: 100px; height: 100px; border-radius: 50%; object-fit:cover;" />
-                            </div>
+                                <input type="file" name="profile_picture" class="form-control" id="profile_picture" />
+                                <?php component('input-error', ['className' => ["profile_pictureError"]]) ?>
+                                <div class="mt-3">
+                                    <img id="profile-picture-preview" src="<?= asset(DEFAULT_USER_AVATAR) ?>" alt="Profile Picture Preview" style="width: 100px; height: 100px; border-radius: 50%; object-fit:cover;" />
+                                </div>
                         </div>
 
                         <div class=" d-grid">
