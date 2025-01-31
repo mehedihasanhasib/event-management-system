@@ -12,6 +12,7 @@
                         <?= component('input-error') ?>
                     </div>
                     <form id="login-from" action="<?= route('login.store') ?>" method="POST">
+                        <input type="hidden" name="_token" value="<?= csrf_token() ?>">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email address</label>
                             <input type="email" name="email" class="form-control" id="email" placeholder="Enter your email" required>

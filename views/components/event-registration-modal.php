@@ -21,6 +21,7 @@
                     </div> -->
 
                     <form id="eventRegistrationForm" method="POST" action="<?= route('attendee.store') ?>">
+                        <input type="hidden" name="_token" value="<?= csrf_token() ?>">
                         <input type="hidden" name="event_id" value="<?= $event['id'] ?>">
                         <div class="mb-4">
                             <div class="row g-3">

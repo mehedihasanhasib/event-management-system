@@ -34,6 +34,7 @@
                             <li><a class="dropdown-item" href="<?= route('creator.events') ?>">My Events</a></li>
                             <li>
                                 <form action="<?= route('logout') ?>" method="POST" class="d-inline">
+                                    <input type="hidden" name="_token" value="<?= csrf_token() ?>">
                                     <button type="submit" class="dropdown-item">Log out</button>
                                 </form>
                             </li>
