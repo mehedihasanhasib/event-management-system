@@ -24,7 +24,7 @@
                         <!-- Event Description -->
                         <div class="mb-3">
                             <label for="eventDescription" class="form-label">Event Description</label>
-                            <textarea class="form-control" id="eventDescription" name="event_description" rows="4" placeholder="Provide a brief description of the event" required></textarea>
+                            <textarea class="form-control" id="eventDescription" name="event_description" rows="7" placeholder="Provide a brief description of the event" required></textarea>
                             <?php component('input-error', ['className' => ['event_descriptionError']]) ?>
                         </div>
 

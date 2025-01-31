@@ -24,7 +24,6 @@ class SessionController extends Controller
             Auth::login($user);
             return json_response(['status' => true, 'message' => 'Successfully logged in'], 200);
         }
-
         return json_response(['errors' => 'Credentials doesn\'t match'], 401);
     }
 
