@@ -32,7 +32,7 @@ class AttendeeController extends Controller
             'email' => ['required', 'email', 'max:255'],
             'phone_number' => ['required', function ($value, $field, $fails) {
                 if (!str_starts_with($value, "01")) {
-                    $fails($field, 'Invalid Phone Number');
+                    $fails($field, 'Invalid Phone Number. Must starts with 01');
                 }
             }, 'max:11'],
             'location' => ['required', 'exists:locations,id'],
