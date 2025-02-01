@@ -31,7 +31,9 @@ class Model
     public function orderBy($column, $order = "asc")
     {
         if ($this->query) {
-            $this->query .= " ORDER BY $column $order";
+            if (strpos($this->query, "ORDER BY") == false) {
+                $this->query .= " ORDER BY {$column} {$order}";
+            }
         } else {
             $this->query = "SELECT * FROM $this->table ORDER BY {$column} {$order}";
         }
@@ -228,7 +230,6 @@ class Model
     // Execute the query with bindings
     private function execute()
     {
-        // dd($this->query);
         $stmt = $this->pdo->prepare($this->query);
 
         foreach ($this->bindings as $key => $value) {

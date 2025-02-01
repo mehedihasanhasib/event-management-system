@@ -20,25 +20,27 @@ class EventUserController extends Controller
 
     public function index(Request $request)
     {
+
         try {
             $event = new Event();
 
-            $events = $event->when($request->has('title'), function ($query) use ($request) {
+            $events = $event->where('date', ">=", date('Y-m-d'))
+                ->when($request->has('title'), function ($query) use ($request) {
 
-                return $query->whereLike('title', $request->input('title')); // search by title
+                    return $query->whereLike('title', $request->input('title')); // search by title
 
-            })->when($request->has('location'), function ($query) use ($request) {
+                })->when($request->has('location'), function ($query) use ($request) {
 
-                return $query->where('location_id', "=", $request->input('location')); // search by location
+                    return $query->where('location_id', "=", $request->input('location')); // search by location
 
-            })->when($request->has('date_from') && $request->has('date_to'), function ($query) use ($request) {
+                })->when($request->has('date_from') && $request->has('date_to'), function ($query) use ($request) {
 
-                return $query->whereBetween('date', [$request->input('date_from'), $request->input('date_to')]); // search by date
+                    return $query->whereBetween('date', [$request->input('date_from'), $request->input('date_to')]); // search by date
 
-            })->when($request->has('sort'), function ($query) use ($request) {
+                })->when($request->has('sort'), function ($query) use ($request) {
 
-                return $query->orderBy('date', $request->input('sort'));
-            })->paginate(9);
+                    return $query->orderBy('date', $request->input('sort'));
+                })->orderBy('id', 'desc')->paginate(9);
 
             return $this->view('events.user.index', ['events' => $events, 'locations' => $this->locations]);
         } catch (\Throwable $th) {
