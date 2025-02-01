@@ -44,7 +44,7 @@ This is a simple web-based Event Management System built using pure PHP with **M
 | Endpoint                                  | Method |
 |-------------------------------------------|--------|
 | 'https://event.hasib.info/api/events'     | GET    |
-| 'https://event.hasib.info/api/event/{id}'| GET    |
+| 'https://event.hasib.info/api/event/{id}' | GET    |
 ```
 
 - Used AJAX for form submission
