@@ -77,8 +77,8 @@
                 Sort By
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="<?= $_SERVER['PATH_INFO'] . "?" . http_build_query(array_merge($_GET, ['sort' => 'asc'])) ?>">Recent</a></li>
-                <li><a class="dropdown-item" href="<?= $_SERVER['PATH_INFO'] . "?" . http_build_query(array_merge($_GET, ['sort' => 'desc'])) ?>">Late</a></li>
+                <li><a class="dropdown-item" href="<?= $_SERVER['PATH_INFO'] . "?" . http_build_query(array_merge($_GET, ['sort' => 'asc'])) ?>">Upcoming</a></li>
+                <li><a class="dropdown-item" href="<?= $_SERVER['PATH_INFO'] . "?" . http_build_query(array_merge($_GET, ['sort' => 'desc'])) ?>">Late Upcoming</a></li>
             </ul>
         </div>
     </div>
