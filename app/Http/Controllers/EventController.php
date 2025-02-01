@@ -46,24 +46,10 @@ class EventController extends Controller
         return $this->view('events.create', ['locations' => $locations]);
     }
 
+    // event create
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'event_title' => ['required', 'string', 'max:255'],
-            'event_slug' => ['required', 'string', 'max:255', 'unique:events,slug'],
-            'event_description' => ['required', 'string', 'max:1000'],
-            'event_date' => ['required', function ($value, $field, $fail) {
-                $startDate = strtotime(date('Y-m-d', strtotime($value)));
-                $currentDate = strtotime(date('Y-m-d'));
-                if ($startDate < $currentDate) {
-                    $fail("Event Date must be in the future.");
-                };
-            }],
-            'event_time' => ['required'],
-            'location' => ['required'],
-            'max_capacity' => ['required', 'numeric'],
-            'banner' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'size:2048'],
-        ]);
+        $validator = Validator::make($request->all(), $this->validation_rules());
 
 
         if ($validator->fails()) {
@@ -95,6 +81,7 @@ class EventController extends Controller
         }
     }
 
+    // event edit page show
     public function edit(Request $request, $id)
     {
         $event_id = $id;
@@ -126,18 +113,13 @@ class EventController extends Controller
         return $this->view('events.edit', ['event' => $events, 'locations' => $locations]);
     }
 
+    // event update
     public function update(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'event_title' => ['required', 'string', 'max:255'],
-            'event_slug' => ['required', 'string', 'max:255'],
-            'event_description' => ['required', 'string', 'max:1000'],
-            'event_date' => ['required'],
-            'event_time' => ['required'],
-            'location' => ['required'],
-            'max_capacity' => ['required'],
+        $validator = Validator::make($request->all(), $this->validation_rules([
             'banner' => ['image', 'mimes:jpg,jpeg,png,webp', 'size:2048'],
-        ]);
+            'event_slug' => ['required', 'string', 'max:255']
+        ]));
 
 
         if ($validator->fails()) {
@@ -203,5 +185,31 @@ class EventController extends Controller
             // Session::flash('message', $th->getMessage());
             return redirect(route('creator.events'));
         }
+    }
+
+    public function validation_rules($new_rule = [])
+    {
+        $rules = [
+            'event_title' => ['required', 'string', 'max:255'],
+            'event_slug' => ['required', 'string', 'max:255', 'unique:events,slug'],
+            'event_description' => ['required', 'string', 'max:2000'],
+            'event_date' => ['required', function ($value, $field, $fail) {
+                $startDate = strtotime(date('Y-m-d', strtotime($value)));
+                $currentDate = strtotime(date('Y-m-d'));
+                if ($startDate < $currentDate) {
+                    $fail("Event Date must be in the future.");
+                };
+            }],
+            'event_time' => ['required'],
+            'location' => ['required'],
+            'max_capacity' => ['required', 'numeric'],
+            'banner' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'size:2048'],
+        ];
+        
+        if (!empty($new_rule)) {
+            $rules = array_merge($rules, $new_rule);
+        }
+
+        return $rules;
     }
 }

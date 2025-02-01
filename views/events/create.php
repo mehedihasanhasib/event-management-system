@@ -86,6 +86,7 @@
 
 
 <?php ob_start() ?>
+<script src="<?= asset('/js/slug-generate.js') ?>"></script>
 <script>
     $(document).ready(function() {
         const eventCreateForm = $("#event-create-form")
@@ -98,9 +99,7 @@
         })
 
         eventTitle.on("change keypress", function(event) {
-            const title = event.target.value
-            const slug = title.toLowerCase().replace(/[\s_,]+/g, "-")
-            eventSlug.val(slug)
+            slug(event, eventSlug)
         })
 
         eventCreateForm.on("submit", function(event) {
