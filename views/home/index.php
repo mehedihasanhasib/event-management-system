@@ -37,7 +37,7 @@
 
 
 <div class="container my-5">
-    <h2 class="text-center mb-4">Upcoming Events</h2>
+    <h2 class="text-center mb-4">Popular Events</h2>
     <div class="row g-4">
         <?php foreach ($events as $event): ?>
             <?php component('event-card', ['event' => $event]) ?>
