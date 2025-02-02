@@ -45,7 +45,6 @@ class RegistrationController extends Controller
             ]);
             unset($new_user['password']);
 
-            Auth::login($user);
             Auth::login($new_user);
             return json_response(['status' => true, 'message' => 'Registration successful'], 201);
         } catch (\Throwable $th) {
