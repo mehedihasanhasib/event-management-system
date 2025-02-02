@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a simple web-based Event Management System built using pure PHP with **MVC architecture**. It provides essential event management functionalities along with a structured, maintainable, scalable codebase featuring a dynamic routing engine, models, custom validation class and many more. Live link `https://event.hasib.info`
+This is a simple web-based Event Management System built using pure PHP with **MVC architecture**. It provides essential event management functionalities along with a structured, maintainable, scalable codebase featuring a dynamic routing engine, models, custom validation class and many more. Live link <a href="https://event.hasib.info">https://event.hasib.info</a>
 
 ## Features
 
