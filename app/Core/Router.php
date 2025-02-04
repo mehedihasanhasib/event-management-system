@@ -97,6 +97,11 @@ class Route
                     die("$method method is not supported on this route\n");
                 }
 
+                // varify csrf token
+                if ($method != "GET") {
+                    (new VerifyCsrf)->handle();
+                }
+
                 if ($route['middleware'] != null) {
                     (new $route['middleware'])->handle();
                 }
