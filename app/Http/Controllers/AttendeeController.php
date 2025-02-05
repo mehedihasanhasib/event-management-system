@@ -45,7 +45,7 @@ class AttendeeController extends Controller
             $attendee = new Attendee();
             $events = new Event();
 
-            $total_attendees = $attendee->where('event_id', "=", 17)->count();
+            $total_attendees = $attendee->where('event_id', "=", $request->input('event_id'))->count();
             $event = $events->where('id', "=", $request->input('event_id'))->get(['capacity']);
 
             if ($total_attendees >= $event['capacity']) {

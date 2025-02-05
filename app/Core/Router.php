@@ -2,8 +2,9 @@
 
 namespace App\Core;
 
-use App\Http\Middlewares\VerifyCsrf;
+use ReflectionMethod;
 use App\Http\Request;
+use App\Http\Middlewares\VerifyCsrf;
 
 
 class Route
@@ -86,14 +87,31 @@ class Route
 
                 $controller = new $route['controller'][0]();
                 $method = $route['controller'][1];
-                $request = new Request();
 
+
+                $reflectionMethod = new ReflectionMethod($controller, $method);
+                $parameters = $reflectionMethod->getParameters();
+
+                foreach ($parameters as $key => $argument) {
+                    if ($argument?->getType()?->getName() === Request::class) {
+                        $request = new Request();
+                        break;
+                    }
+                }
+
+                // Remove first match element (full match) if parameters exist
                 if (isset($matches) && $matches == true) {
                     array_shift($matches);
+                } else {
+                    $matches = [];
+                }
+
+                // Call the controller method dynamically
+                if (isset($request)) {
                     $controller->$method($request, ...$matches);
                     return;
                 } else {
-                    $controller->$method($request);
+                    $controller->$method(...$matches);
                     return;
                 }
             }

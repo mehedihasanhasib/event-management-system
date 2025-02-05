@@ -53,7 +53,7 @@ class EventUserController extends Controller
         }
     }
 
-    public function show(Request $request, $slug)
+    public function show($slug)
     {
         try {
             $event = DB::query(

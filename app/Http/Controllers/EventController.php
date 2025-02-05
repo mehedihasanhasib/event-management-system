@@ -82,7 +82,7 @@ class EventController extends Controller
     }
 
     // event edit page show
-    public function edit(Request $request, $id)
+    public function edit($id)
     {
         $event_id = $id;
         $user_id = auth()['id'];
@@ -164,7 +164,7 @@ class EventController extends Controller
         }
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
         try {
             $deleted_event = DB::query("DELETE FROM events WHERE id = :id AND user_id = :user_id", [
