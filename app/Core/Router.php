@@ -64,13 +64,17 @@ class Route
     public static function route($uri, $method)
     {
         foreach (self::$routes as $route) {
-            if ($route['uri'] == $uri) {
+            $routePattern = preg_replace('/\{([a-zA-Z0-9_-]+)\}/', '([a-zA-Z0-9_-]+)', $route['uri']);
+            $routePattern = "#^" . $routePattern . "$#";
+
+            if ($route['uri'] == $uri || preg_match($routePattern, $uri, $matches)) {
                 // check method
                 if ($method != $route['method']) {
                     http_response_code(405);
                     die("$method method is not supported on this route\n");
                 }
 
+                // varify csrf token
                 if ($method != "GET") {
                     (new VerifyCsrf)->handle();
                 }
@@ -83,38 +87,18 @@ class Route
                 $controller = new $route['controller'][0]();
                 $method = $route['controller'][1];
                 $request = new Request();
-                $controller->$method($request);
-                return;
-            }
 
-            $routePattern = preg_replace('/\{([a-zA-Z0-9_-]+)\}/', '([a-zA-Z0-9_-]+)', $route['uri']);
-            $routePattern = "#^" . $routePattern . "$#";
-
-            if (preg_match($routePattern, $uri, $matches)) {
-                array_shift($matches); // Remove the full match from the array
-                if ($method != $route['method']) {
-                    http_response_code(405);
-                    die("$method method is not supported on this route\n");
+                if (isset($matches) && $matches == true) {
+                    array_shift($matches);
+                    $controller->$method($request, ...$matches);
+                    return;
+                } else {
+                    $controller->$method($request);
+                    return;
                 }
-
-                // varify csrf token
-                if ($method != "GET") {
-                    (new VerifyCsrf)->handle();
-                }
-
-                if ($route['middleware'] != null) {
-                    (new $route['middleware'])->handle();
-                }
-
-                $controller = new $route['controller'][0]();
-                $action = $route['controller'][1];
-                $request = new Request();
-
-                // Pass dynamic parameters to the controller method
-                $controller->$action($request, ...$matches);
-                return;
             }
         }
+
         http_response_code(404);
         require_once '../views/404.php';
         exit;
