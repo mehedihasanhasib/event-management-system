@@ -133,7 +133,7 @@ class Model
     }
 
     // WHERE clause
-    public function where($column, $operator = "=", $value)
+    public function where($column, $operator = "=", $value = null)
     {
         $this->addCondition("{$column} {$operator} :{$column}");
         $this->bindings[$column] = $value;
@@ -220,7 +220,7 @@ class Model
     // Add raw conditions to the query
     private function addCondition($condition)
     {
-        if (strpos($this->query, 'WHERE') === false) {
+        if (strpos($this->query ?? "", 'WHERE') === false) {
             $this->query = "SELECT * FROM {$this->table} WHERE {$condition}";
         } else {
             $this->query .= " AND {$condition}";
