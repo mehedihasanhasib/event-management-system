@@ -4,8 +4,8 @@ return [
     'db' => [
         'host' => 'localhost',
         'port' => 3306,
-        'dbname' => 'event-management',
+        'dbname' => 'ollyo-test',
         'username' => 'root',
-        'password' => '',
+        'password' => 'root1234',
     ],
 ];

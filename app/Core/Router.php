@@ -69,18 +69,15 @@ class Route
             $routePattern = "#^" . $routePattern . "$#";
 
             if ($route['uri'] == $uri || preg_match($routePattern, $uri, $matches)) {
-                // check method
                 if ($method != $route['method']) {
                     http_response_code(405);
                     die("$method method is not supported on this route\n");
                 }
 
-                // varify csrf token
                 if ($method != "GET") {
                     (new VerifyCsrf)->handle();
                 }
 
-                // apply middleware
                 if ($route['middleware'] != null) {
                     (new $route['middleware'])->handle();
                 }
@@ -99,14 +96,12 @@ class Route
                     }
                 }
 
-                // Remove first match element (full match) if parameters exist
                 if (isset($matches) && $matches == true) {
                     array_shift($matches);
                 } else {
                     $matches = [];
                 }
 
-                // Call the controller method dynamically
                 if (isset($request)) {
                     $controller->$method($request, ...$matches);
                     return;
